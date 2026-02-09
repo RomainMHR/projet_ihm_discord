@@ -42,25 +42,20 @@ public class LoginView extends JPanel {
 
     protected void initGUI() {
         this.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Tag
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        this.add(new JLabel("Tag (@...) :"), gbc);
+        this.add(new JLabel("Tag (@...) :"), new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         mTagField = new JTextField(20);
-        gbc.gridx = 1;
-        this.add(mTagField, gbc);
+        this.add(mTagField, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
         // Password
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        this.add(new JLabel("Mot de passe :"), gbc);
+        this.add(new JLabel("Mot de passe :"), new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         mPasswordField = new JPasswordField(20);
-        gbc.gridx = 1;
-        this.add(mPasswordField, gbc);
+        this.add(mPasswordField, new GridBagConstraints(1, 1, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
         // Buttons
         JPanel buttonPanel = new JPanel();
@@ -82,10 +77,8 @@ public class LoginView extends JPanel {
         });
         buttonPanel.add(mRegisterButton);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        this.add(buttonPanel, gbc);
+        this.add(buttonPanel, new GridBagConstraints(0, 2, 2, 1, 0, 0, GridBagConstraints.CENTER,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
     }
 
     protected void login() {

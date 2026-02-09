@@ -42,41 +42,34 @@ public class RegisterView extends JPanel {
 
     protected void initGUI() {
         this.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Name
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        this.add(new JLabel("Nom :"), gbc);
+        this.add(new JLabel("Nom :"), new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         mNameField = new JTextField(20);
-        gbc.gridx = 1;
-        this.add(mNameField, gbc);
+        this.add(mNameField, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
         // Tag
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        this.add(new JLabel("Tag (@...) :"), gbc);
+        this.add(new JLabel("Tag (@...) :"), new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         mTagField = new JTextField(20);
-        gbc.gridx = 1;
-        this.add(mTagField, gbc);
+        this.add(mTagField, new GridBagConstraints(1, 1, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
         // Password
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        this.add(new JLabel("Mot de passe :"), gbc);
+        this.add(new JLabel("Mot de passe :"), new GridBagConstraints(0, 2, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         mPasswordField = new JPasswordField(20);
-        gbc.gridx = 1;
-        this.add(mPasswordField, gbc);
+        this.add(mPasswordField, new GridBagConstraints(1, 2, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
         // Confirm Password
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        this.add(new JLabel("Confirmer mdp :"), gbc);
+        this.add(new JLabel("Confirmer mdp :"), new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         mConfirmPasswordField = new JPasswordField(20);
-        gbc.gridx = 1;
-        this.add(mConfirmPasswordField, gbc);
+        this.add(mConfirmPasswordField, new GridBagConstraints(1, 3, 1, 1, 0, 0, GridBagConstraints.WEST,
+                GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
         // Buttons
         JPanel buttonPanel = new JPanel();
@@ -98,10 +91,8 @@ public class RegisterView extends JPanel {
         });
         buttonPanel.add(mCancelButton);
 
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        this.add(buttonPanel, gbc);
+        this.add(buttonPanel, new GridBagConstraints(0, 4, 2, 1, 0, 0, GridBagConstraints.CENTER,
+                GridBagConstraints.HORIZONTAL, new Insets(10, 5, 5, 5), 0, 0));
     }
 
     protected void register() {
