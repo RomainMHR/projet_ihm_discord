@@ -2,9 +2,11 @@ package main.java.com.ubo.tp.message.ihm;
 
 import java.io.File;
 
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import main.java.com.ubo.tp.message.core.DataManager;
+import main.java.com.ubo.tp.message.core.session.Session;
 
 /**
  * Classe principale l'application.
@@ -18,9 +20,19 @@ public class MessageApp {
 	protected DataManager mDataManager;
 
 	/**
+	 * Session.
+	 */
+	protected Session mSession;
+
+	/**
 	 * Vue principale de l'application.
 	 */
 	protected MessageAppMainView mMainView;
+
+	/**
+	 * Fenêtre pour le login/register.
+	 */
+	protected JFrame mLoginFrame;
 
 	/**
 	 * Constructeur.
@@ -29,6 +41,7 @@ public class MessageApp {
 	 */
 	public MessageApp(DataManager dataManager) {
 		this.mDataManager = dataManager;
+		this.mSession = new Session();
 	}
 
 	/**
@@ -60,7 +73,6 @@ public class MessageApp {
 	 * Initialisation de l'interface graphique.
 	 */
 	protected void initGui() {
-		this.mMainView = new MessageAppMainView();
 		ConsoleDatabaseObserver consoleObserver = new ConsoleDatabaseObserver();
 		this.mDataManager.addObserver(consoleObserver);
 	}
@@ -92,7 +104,11 @@ public class MessageApp {
 			fileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 			fileChooser.setDialogTitle("Sélectionnez le répertoire d'échange");
 
-			int result = fileChooser.showOpenDialog(this.mMainView.mFrame);
+			// Hack pour afficher le JFileChooser sans parent frame si mLoginFrame n'est pas
+			// encore init
+			JFrame parentFrame = (this.mMainView != null) ? this.mMainView.mFrame : null;
+
+			int result = fileChooser.showOpenDialog(parentFrame);
 			if (result == javax.swing.JFileChooser.APPROVE_OPTION) {
 				exchangeDirectory = fileChooser.getSelectedFile();
 				exchangeDirectoryPath = exchangeDirectory.getAbsolutePath();
@@ -133,6 +149,49 @@ public class MessageApp {
 	}
 
 	public void show() {
+		// Au démarrage, on affiche la vue de login
+		this.showLoginView();
+	}
+
+	public void showLoginView() {
+		if (mLoginFrame == null) {
+			mLoginFrame = new JFrame("Connexion");
+			mLoginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			mLoginFrame.setSize(400, 300);
+			mLoginFrame.setLocationRelativeTo(null);
+		}
+
+		LoginView loginView = new LoginView(this, mDataManager, mSession);
+		mLoginFrame.setContentPane(loginView);
+		mLoginFrame.revalidate();
+		mLoginFrame.repaint();
+		mLoginFrame.setVisible(true);
+	}
+
+	public void showRegisterView() {
+		if (mLoginFrame == null) {
+			mLoginFrame = new JFrame("Inscription");
+			mLoginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			mLoginFrame.setSize(400, 400); // Un peu plus grand pour l'inscription
+			mLoginFrame.setLocationRelativeTo(null);
+		}
+
+		RegisterView registerView = new RegisterView(this, mDataManager);
+		mLoginFrame.setContentPane(registerView);
+		mLoginFrame.revalidate();
+		mLoginFrame.repaint();
+		mLoginFrame.setVisible(true);
+	}
+
+	public void showMainView() {
+		if (mLoginFrame != null) {
+			mLoginFrame.dispose();
+			mLoginFrame = null;
+		}
+
+		if (mMainView == null) {
+			this.mMainView = new MessageAppMainView();
+		}
 		this.mMainView.show();
 	}
 }
