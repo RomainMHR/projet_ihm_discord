@@ -101,7 +101,6 @@ public class RegisterView extends JPanel {
         String password = new String(mPasswordField.getPassword());
         String confirmPassword = new String(mConfirmPasswordField.getPassword());
 
-        // SRS-MAP-USR-002 : Nom et Tag obligatoires
         if (name.isEmpty() || tag.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tous les champs sont obligatoires.", "Erreur",
                     JOptionPane.ERROR_MESSAGE);
@@ -114,7 +113,6 @@ public class RegisterView extends JPanel {
             return;
         }
 
-        // SRS-MAP-USR-003 : Tag unique
         for (User user : mDataManager.getUsers()) {
             if (user.getUserTag().equals(tag)) {
                 JOptionPane.showMessageDialog(this, "Ce tag est déjà utilisé.", "Erreur", JOptionPane.ERROR_MESSAGE);
