@@ -7,6 +7,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashSet;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import main.java.com.ubo.tp.message.core.session.Session;
+import main.java.com.ubo.tp.message.datamodel.User;
 
 /**
  * Classe de la vue principale de l'application.
@@ -106,20 +109,21 @@ public class MessageAppMainView {
         mMenuBar.add(mHelpMenu);
         mMenuBar.add(mLogoutMenu);
 
-        // Menu de démo pour changer de panel
-        // JMenu demoMenu = new JMenu("Démo");
-        // JMenuItem userListItem = new JMenuItem("Liste utilisateurs");
-        // userListItem.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // // Exemple d'appel à setMainPanel
-        // setMainPanel(new UserListPanel(mSession.getConnectedUser() != null
-        // ? main.java.com.ubo.tp.message.ihm.MessageApp.getDataManager().getUsers()
-        // : new java.util.HashSet<>()));
-        // }
-        // });
-        // demoMenu.add(userListItem);
-        // mMenuBar.add(demoMenu);
+        /*
+         * // Menu de démo pour changer de panel
+         * JMenu demoMenu = new JMenu("Démo");
+         * JMenuItem userListItem = new JMenuItem("Liste utilisateurs");
+         * userListItem.addActionListener(new ActionListener() {
+         * 
+         * @Override
+         * public void actionPerformed(ActionEvent e) {
+         * // Exemple d'appel à setMainPanel
+         * setMainPanel(new UserListPanel(new HashSet<User>()));
+         * }
+         * });
+         * demoMenu.add(userListItem);
+         * mMenuBar.add(demoMenu);
+         */
 
         mFrame.setJMenuBar(mMenuBar);
     }
