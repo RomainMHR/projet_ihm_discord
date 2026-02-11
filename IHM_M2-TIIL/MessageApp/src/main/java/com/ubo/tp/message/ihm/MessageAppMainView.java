@@ -6,9 +6,6 @@ package main.java.com.ubo.tp.message.ihm;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.HashSet;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,7 +17,6 @@ import javax.swing.JPanel;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.session.Session;
-import main.java.com.ubo.tp.message.datamodel.User;
 
 /**
  * Classe de la vue principale de l'application.
@@ -157,6 +153,13 @@ public class MessageAppMainView {
 
         // Utilisation de la méthode pour définir le panneau
         this.setMainPanel(channelListPanel);
+
+        // Ajout de la liste des utilisateurs à droite
+        main.java.com.ubo.tp.message.ihm.user.UserController userController = new main.java.com.ubo.tp.message.ihm.user.UserController(
+                mDataManager, mSession);
+        main.java.com.ubo.tp.message.ihm.user.UserListPanel userListPanel = new main.java.com.ubo.tp.message.ihm.user.UserListPanel(
+                userController);
+        mFrame.add(userListPanel, BorderLayout.EAST);
     }
 
     /**
