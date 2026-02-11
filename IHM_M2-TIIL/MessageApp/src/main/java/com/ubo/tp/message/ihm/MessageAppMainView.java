@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -15,19 +14,26 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import main.java.com.ubo.tp.message.core.session.Session;
+
 /**
  * Classe de la vue principale de l'application.
  */
 public class MessageAppMainView {
 
+    protected Session mSession;
+
     protected JFrame mFrame;
     protected JMenuBar mMenuBar;
     protected JMenu mFileMenu;
     protected JMenu mHelpMenu;
+    protected JMenu mLogoutMenu;
     protected JMenuItem mExitItem;
     protected JMenuItem mAboutItem;
+    protected JMenuItem mLogoutItem;
 
-    public MessageAppMainView() {
+    public MessageAppMainView(Session mSession) {
+        this.mSession = mSession;
         this.initGUI();
     }
 
@@ -51,6 +57,7 @@ public class MessageAppMainView {
         mMenuBar = new JMenuBar();
         mFileMenu = new JMenu("Fichier");
         mHelpMenu = new JMenu("?");
+        mLogoutMenu = new JMenu("Deconnexion");
 
         // Item Quitter
         mExitItem = new JMenuItem("Quitter");
@@ -78,11 +85,21 @@ public class MessageAppMainView {
             }
         });
 
+        mLogoutItem = new JMenuItem("Se déconnecter");
+        mLogoutItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mSession.disconnect();
+            }
+        });
+
         mFileMenu.add(mExitItem);
         mHelpMenu.add(mAboutItem);
+        mLogoutMenu.add(mLogoutItem);
 
         mMenuBar.add(mFileMenu);
         mMenuBar.add(mHelpMenu);
+        mMenuBar.add(mLogoutMenu);
 
         mFrame.setJMenuBar(mMenuBar);
     }

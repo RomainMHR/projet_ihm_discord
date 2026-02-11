@@ -49,7 +49,7 @@ public class LoginController {
             mSession.connect(foundUser);
             JOptionPane.showMessageDialog(mView, "Connexion réussie ! Bienvenue " + foundUser.getName(), "Succès",
                     JOptionPane.INFORMATION_MESSAGE);
-            mMessageApp.showMainView();
+            mMessageApp.notifyLogin(foundUser);
         } else {
             JOptionPane.showMessageDialog(mView, "Identifiant ou mot de passe incorrect.", "Erreur",
                     JOptionPane.ERROR_MESSAGE);

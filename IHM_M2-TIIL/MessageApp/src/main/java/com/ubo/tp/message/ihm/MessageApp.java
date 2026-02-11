@@ -7,17 +7,19 @@ import javax.swing.UIManager;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.session.Session;
+import main.java.com.ubo.tp.message.datamodel.User;
 import main.java.com.ubo.tp.message.ihm.login.LoginController;
 import main.java.com.ubo.tp.message.ihm.login.LoginView;
 import main.java.com.ubo.tp.message.ihm.login.RegisterController;
 import main.java.com.ubo.tp.message.ihm.login.RegisterView;
+import main.java.com.ubo.tp.message.core.session.ISessionObserver;
 
 /**
  * Classe principale l'application.
  *
  * @author S.Lucas
  */
-public class MessageApp {
+public class MessageApp implements ISessionObserver {
 	/**
 	 * Base de données.
 	 */
@@ -46,6 +48,8 @@ public class MessageApp {
 	public MessageApp(DataManager dataManager) {
 		this.mDataManager = dataManager;
 		this.mSession = new Session();
+
+		this.mSession.addObserver(this);
 	}
 
 	/**
@@ -196,8 +200,23 @@ public class MessageApp {
 		}
 
 		if (mMainView == null) {
-			this.mMainView = new MessageAppMainView();
+			this.mMainView = new MessageAppMainView(mSession);
 		}
 		this.mMainView.show();
+	}
+
+	@Override
+	public void notifyLogout() {
+		System.out.println("Utilsateur déconnecté");
+		if (mMainView != null) {
+			mMainView.mFrame.dispose();
+			mMainView = null;
+		}
+		this.showLoginView();
+	}
+
+	@Override
+	public void notifyLogin(User user) {
+		this.showMainView();
 	}
 }
