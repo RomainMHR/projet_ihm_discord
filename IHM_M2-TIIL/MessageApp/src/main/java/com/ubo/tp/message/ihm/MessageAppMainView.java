@@ -9,10 +9,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import main.java.com.ubo.tp.message.core.session.Session;
 
@@ -51,6 +53,9 @@ public class MessageAppMainView {
 
         // Centrage de la fenêtre
         mFrame.setLocationRelativeTo(null);
+
+        // Initialisation du contenu
+        this.initContent();
     }
 
     protected void initMenu() {
@@ -101,6 +106,21 @@ public class MessageAppMainView {
         mMenuBar.add(mHelpMenu);
         mMenuBar.add(mLogoutMenu);
 
+        // Menu de démo pour changer de panel
+        // JMenu demoMenu = new JMenu("Démo");
+        // JMenuItem userListItem = new JMenuItem("Liste utilisateurs");
+        // userListItem.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // // Exemple d'appel à setMainPanel
+        // setMainPanel(new UserListPanel(mSession.getConnectedUser() != null
+        // ? main.java.com.ubo.tp.message.ihm.MessageApp.getDataManager().getUsers()
+        // : new java.util.HashSet<>()));
+        // }
+        // });
+        // demoMenu.add(userListItem);
+        // mMenuBar.add(demoMenu);
+
         mFrame.setJMenuBar(mMenuBar);
     }
 
@@ -116,6 +136,42 @@ public class MessageAppMainView {
                 "UBO M2-TIIL\nDépartement Informatique",
                 "A propos",
                 JOptionPane.INFORMATION_MESSAGE, logoIcon);
+    }
+
+    protected JPanel mCurrentContent;
+
+    protected void initContent() {
+        // Création d'un panneau pour le contenu
+        JPanel contentPanel = new JPanel();
+
+        // Ajout d'un texte
+        JLabel welcomeLabel = new JLabel("Bienvenue dans MessageApp !");
+        contentPanel.add(welcomeLabel);
+
+        // Utilisation de la méthode pour définir le panneau
+        this.setMainPanel(contentPanel);
+    }
+
+    /**
+     * Change le panneau central de la fenêtre principale.
+     * 
+     * @param newContent Le nouveau JPanel à afficher.
+     */
+    public void setMainPanel(JPanel newContent) {
+        // Suppression de l'ancien contenu s'il existe
+        if (mCurrentContent != null) {
+            mFrame.remove(mCurrentContent);
+        }
+
+        // Mise à jour de la référence
+        mCurrentContent = newContent;
+
+        // Ajout du nouveau contenu
+        mFrame.add(mCurrentContent, BorderLayout.CENTER);
+
+        // Rafraîchissement de l'affichage
+        mFrame.revalidate();
+        mFrame.repaint();
     }
 
     public void show() {
