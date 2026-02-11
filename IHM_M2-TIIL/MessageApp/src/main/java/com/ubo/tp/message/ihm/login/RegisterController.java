@@ -1,8 +1,10 @@
-package main.java.com.ubo.tp.message.ihm;
+package main.java.com.ubo.tp.message.ihm.login;
 
 import java.util.UUID;
 
 import javax.swing.JOptionPane;
+
+import main.java.com.ubo.tp.message.ihm.MessageApp;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.datamodel.User;

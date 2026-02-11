@@ -7,6 +7,10 @@ import javax.swing.UIManager;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.session.Session;
+import main.java.com.ubo.tp.message.ihm.login.LoginController;
+import main.java.com.ubo.tp.message.ihm.login.LoginView;
+import main.java.com.ubo.tp.message.ihm.login.RegisterController;
+import main.java.com.ubo.tp.message.ihm.login.RegisterView;
 
 /**
  * Classe principale l'application.
