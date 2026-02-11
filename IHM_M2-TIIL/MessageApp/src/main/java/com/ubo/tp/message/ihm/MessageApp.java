@@ -161,7 +161,8 @@ public class MessageApp {
 			mLoginFrame.setLocationRelativeTo(null);
 		}
 
-		LoginView loginView = new LoginView(this, mDataManager, mSession);
+		LoginController controller = new LoginController(this, mDataManager, mSession);
+		LoginView loginView = new LoginView(controller);
 		mLoginFrame.setContentPane(loginView);
 		mLoginFrame.revalidate();
 		mLoginFrame.repaint();
@@ -176,7 +177,8 @@ public class MessageApp {
 			mLoginFrame.setLocationRelativeTo(null);
 		}
 
-		RegisterView registerView = new RegisterView(this, mDataManager);
+		RegisterController controller = new RegisterController(this, mDataManager);
+		RegisterView registerView = new RegisterView(controller);
 		mLoginFrame.setContentPane(registerView);
 		mLoginFrame.revalidate();
 		mLoginFrame.repaint();

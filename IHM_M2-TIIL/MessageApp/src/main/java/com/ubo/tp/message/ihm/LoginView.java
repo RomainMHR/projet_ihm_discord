@@ -8,14 +8,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
-import main.java.com.ubo.tp.message.core.DataManager;
-import main.java.com.ubo.tp.message.core.session.ISession;
-import main.java.com.ubo.tp.message.datamodel.User;
 
 /**
  * Classe de la vue de connexion.
@@ -24,19 +19,16 @@ public class LoginView extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    protected DataManager mDataManager;
-    protected ISession mSession;
-    protected MessageApp mMessageApp;
+    protected LoginController mController;
 
     protected JTextField mTagField;
     protected JPasswordField mPasswordField;
     protected JButton mLoginButton;
     protected JButton mRegisterButton;
 
-    public LoginView(MessageApp messageApp, DataManager dataManager, ISession session) {
-        this.mMessageApp = messageApp;
-        this.mDataManager = dataManager;
-        this.mSession = session;
+    public LoginView(LoginController controller) {
+        this.mController = controller;
+        this.mController.setView(this);
         this.initGUI();
     }
 
@@ -63,7 +55,7 @@ public class LoginView extends JPanel {
         mLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                login();
+                mController.login(mTagField.getText(), new String(mPasswordField.getPassword()));
             }
         });
         buttonPanel.add(mLoginButton);
@@ -72,43 +64,12 @@ public class LoginView extends JPanel {
         mRegisterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mMessageApp.showRegisterView();
+                mController.goToRegister();
             }
         });
         buttonPanel.add(mRegisterButton);
 
         this.add(buttonPanel, new GridBagConstraints(0, 2, 2, 1, 0, 0, GridBagConstraints.CENTER,
                 GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
-    }
-
-    protected void login() {
-        String tag = mTagField.getText();
-        String password = new String(mPasswordField.getPassword());
-
-        if (tag.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Recherche de l'utilisateur
-        User foundUser = null;
-        for (User user : mDataManager.getUsers()) {
-            if (user.getUserTag().equals(tag)) {
-                foundUser = user;
-                break;
-            }
-        }
-
-        if (foundUser != null && foundUser.getUserPassword().equals(password)) {
-            // SRS-MAP-USR-004 : Connexion
-            mSession.connect(foundUser);
-            JOptionPane.showMessageDialog(this, "Connexion réussie ! Bienvenue " + foundUser.getName(), "Succès",
-                    JOptionPane.INFORMATION_MESSAGE);
-            mMessageApp.showMainView();
-        } else {
-            JOptionPane.showMessageDialog(this, "Identifiant ou mot de passe incorrect.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
-        }
     }
 }
