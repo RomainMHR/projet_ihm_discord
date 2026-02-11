@@ -18,6 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.session.Session;
 import main.java.com.ubo.tp.message.datamodel.User;
 
@@ -37,8 +38,11 @@ public class MessageAppMainView {
     protected JMenuItem mAboutItem;
     protected JMenuItem mLogoutItem;
 
-    public MessageAppMainView(Session mSession) {
+    protected DataManager mDataManager;
+
+    public MessageAppMainView(Session mSession, DataManager dataManager) {
         this.mSession = mSession;
+        this.mDataManager = dataManager;
         this.initGUI();
     }
 
@@ -145,15 +149,14 @@ public class MessageAppMainView {
     protected JPanel mCurrentContent;
 
     protected void initContent() {
-        // Création d'un panneau pour le contenu
-        JPanel contentPanel = new JPanel();
-
-        // Ajout d'un texte
-        JLabel welcomeLabel = new JLabel("Bienvenue dans MessageApp !");
-        contentPanel.add(welcomeLabel);
+        // Création du contrôleur et de la vue des canaux
+        main.java.com.ubo.tp.message.ihm.channel.ChannelController channelController = new main.java.com.ubo.tp.message.ihm.channel.ChannelController(
+                mDataManager, mSession);
+        main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel channelListPanel = new main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel(
+                channelController);
 
         // Utilisation de la méthode pour définir le panneau
-        this.setMainPanel(contentPanel);
+        this.setMainPanel(channelListPanel);
     }
 
     /**

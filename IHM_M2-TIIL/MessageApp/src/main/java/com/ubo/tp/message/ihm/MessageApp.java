@@ -200,7 +200,7 @@ public class MessageApp implements ISessionObserver {
 		}
 
 		if (mMainView == null) {
-			this.mMainView = new MessageAppMainView(mSession);
+			this.mMainView = new MessageAppMainView(mSession, mDataManager);
 		}
 		this.mMainView.show();
 	}
