@@ -4,7 +4,7 @@
 
 - [x] **SRS-MAP-USR-001** : L'utilisateur peut enregistrer un compte utilisateur dans le système (nom, tag).
 - [x] **SRS-MAP-USR-002** : Lors de l'enregistrement d'un compte utilisateur, le tag et le nom de l'utilisateur sont obligatoires.
-- [ ] **SRS-MAP-USR-003** : Le tag correspondant à un utilisateur est unique dans le système.
+- [x] **SRS-MAP-USR-003** : Le tag correspondant à un utilisateur est unique dans le système.
 - [x] **SRS-MAP-USR-004** : L'utilisateur peut se connecter sur un compte préalablement enregistré.
 - [x] **SRS-MAP-USR-005** : L'utilisateur connecté peut se déconnecter de l'application.
 - [x] **SRS-MAP-USR-007** : L'utilisateur connecté peut consulter la liste des utilisateurs enregistrés.
@@ -16,7 +16,7 @@
 
 - [x] **SRS-MAP-CHN-001** : L'utilisateur connecté peut consulter la liste des canaux enregistrés.
 - [ ] **SRS-MAP-CHN-002** : L'utilisateur connecté peut rechercher un canal.
-- [ ] **SRS-MAP-CHN-003** : L'utilisateur connecté peut créer un canal public.
+- [x] **SRS-MAP-CHN-003** : L'utilisateur connecté peut créer un canal public.
 - [ ] **SRS-MAP-CHN-004** : L'utilisateur connecté peut créer un canal privé.
 - [ ] **SRS-MAP-CHN-005** : L'utilisateur connecté peut quitter un canal privé dont il n'est pas le propriétaire.
 - [ ] **SRS-MAP-CHN-006** : L'utilisateur connecté peut supprimer un canal privé dont il est le propriétaire.
