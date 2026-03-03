@@ -29,7 +29,7 @@ public class RegisterController {
 
     public void register(String name, String tag, String password, String confirmPassword) {
         // SRS-MAP-USR-002 : Nom et Tag obligatoires
-        if (name.isEmpty() || tag.isEmpty() || password.isEmpty()) {
+        if (name.trim().isEmpty() || tag.trim().isEmpty() || password.trim().isEmpty()) {
             JOptionPane.showMessageDialog(mView, "Tous les champs sont obligatoires.", "Erreur",
                     JOptionPane.ERROR_MESSAGE);
             return;
