@@ -107,6 +107,29 @@ public class MessageAppMainView {
 
         mMenuBar.add(mFileMenu);
         mMenuBar.add(mHelpMenu);
+
+        // Menu Profil
+        JMenu mProfileMenu = new JMenu("Profil");
+        JMenuItem mChangeNameItem = new JMenuItem("Modifier mon nom");
+        mChangeNameItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                main.java.com.ubo.tp.message.datamodel.User user = mSession.getConnectedUser();
+                if (user != null) {
+                    String newName = JOptionPane.showInputDialog(mFrame, "Nouveau nom d'utilisateur :",
+                            "Modifier mon nom", JOptionPane.QUESTION_MESSAGE);
+                    if (newName != null && !newName.trim().isEmpty()) {
+                        user.setName(newName.trim());
+                        mDataManager.sendUser(user);
+                        JOptionPane.showMessageDialog(mFrame, "Nom modifié avec succès !", "Succès",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        });
+        mProfileMenu.add(mChangeNameItem);
+        mMenuBar.add(mProfileMenu);
+
         mMenuBar.add(mLogoutMenu);
 
         /*

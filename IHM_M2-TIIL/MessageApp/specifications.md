@@ -9,7 +9,7 @@
 - [x] **SRS-MAP-USR-005** : L'utilisateur connecté peut se déconnecter de l'application.
 - [x] **SRS-MAP-USR-007** : L'utilisateur connecté peut consulter la liste des utilisateurs enregistrés.
 - [ ] **SRS-MAP-USR-008** : L'utilisateur connecté peut rechercher un utilisateur enregistré.
-- [ ] **SRS-MAP-USR-009** : L'utilisateur connecté peut modifier son nom d'utilisateur.
+- [x] **SRS-MAP-USR-009** : L'utilisateur connecté peut modifier son nom d'utilisateur.
 - [ ] **SRS-MAP-USR-010** : L'utilisateur connecté peut supprimer son compte.
 
 ## Gestion des Canaux
