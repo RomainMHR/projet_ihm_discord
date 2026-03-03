@@ -123,6 +123,19 @@ public class DataFilesManager {
 	}
 
 	/**
+	 * Suppression d'un fichier pour un utilisateur ({@link User}).
+	 *
+	 * @param user Utilisateur à supprimer.
+	 */
+	public void deleteUserFile(User user) {
+		String destFileName = this.getFileName(user.getUuid(), Constants.USER_FILE_EXTENSION);
+		File file = new File(destFileName);
+		if (file.exists()) {
+			file.delete();
+		}
+	}
+
+	/**
 	 * Génération d'un fichier pour un utilisateur ({@link User}).
 	 *
 	 * @param user Utilisateur à générer.

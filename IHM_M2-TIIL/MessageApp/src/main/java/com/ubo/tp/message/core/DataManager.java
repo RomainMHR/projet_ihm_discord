@@ -103,6 +103,15 @@ public class DataManager {
 	}
 
 	/**
+	 * Supprime un Utilisateur.
+	 *
+	 * @param user
+	 */
+	public void deleteUser(User user) {
+		this.mEntityManager.deleteUserFile(user);
+	}
+
+	/**
 	 * Ecrit un Canal.
 	 *
 	 * @param channel

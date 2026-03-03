@@ -128,6 +128,28 @@ public class MessageAppMainView {
             }
         });
         mProfileMenu.add(mChangeNameItem);
+
+        JMenuItem mDeleteAccountItem = new JMenuItem("Supprimer mon compte");
+        mDeleteAccountItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int response = JOptionPane.showConfirmDialog(mFrame,
+                        "Êtes-vous sûr de vouloir supprimer votre compte définitivement ?",
+                        "Confirmation de suppression",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (response == JOptionPane.YES_OPTION) {
+                    main.java.com.ubo.tp.message.datamodel.User user = mSession.getConnectedUser();
+                    if (user != null) {
+                        mDataManager.deleteUser(user);
+                        mSession.disconnect();
+                        JOptionPane.showMessageDialog(mFrame, "Votre compte a été supprimé.", "Information",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        });
+        mProfileMenu.add(mDeleteAccountItem);
+
         mMenuBar.add(mProfileMenu);
 
         mMenuBar.add(mLogoutMenu);
