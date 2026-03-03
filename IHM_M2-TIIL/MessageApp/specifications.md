@@ -3,7 +3,7 @@
 ## Gestion des Utilisateurs
 
 - [x] **SRS-MAP-USR-001** : L'utilisateur peut enregistrer un compte utilisateur dans le système (nom, tag).
-- [ ] **SRS-MAP-USR-002** : Lors de l'enregistrement d'un compte utilisateur, le tag et le nom de l'utilisateur sont obligatoires.
+- [x] **SRS-MAP-USR-002** : Lors de l'enregistrement d'un compte utilisateur, le tag et le nom de l'utilisateur sont obligatoires.
 - [ ] **SRS-MAP-USR-003** : Le tag correspondant à un utilisateur est unique dans le système.
 - [x] **SRS-MAP-USR-004** : L'utilisateur peut se connecter sur un compte préalablement enregistré.
 - [x] **SRS-MAP-USR-005** : L'utilisateur connecté peut se déconnecter de l'application.
@@ -33,7 +33,7 @@
 - [ ] **SRS-MAP-MSG-004** : L'utilisateur connecté peut envoyer un message dans un canal privé dont il est membre.
 - [ ] **SRS-MAP-MSG-005** : L'utilisateur connecté peut rechercher un message dans un canal.
 - [ ] **SRS-MAP-MSG-006** : L'utilisateur connecté peut supprimer un message dont il est l'auteur.
-- [x] **SRS-MAP-MSG-007** : L'utilisateur connecté peut envoyer un message privé à un utilisateur.
+- [ ] **SRS-MAP-MSG-007** : L'utilisateur connecté peut envoyer un message privé à un utilisateur.
 - [ ] **SRS-MAP-MSG-008** : Le texte d'un message ne dépasse pas 200 caractères.
 - [ ] **SRS-MAP-MSG-009** : Lors de la rédaction d'un message, l'utilisateur connecté peut mentionner un autre utilisateur du canal en utilisant le caractère '@'.
 - [ ] **SRS-MAP-MSG-010** : Une notification avertit l'utilisateur connecté lorsqu'un utilisateur lui envoie un message direct ou lorsqu'il est mentionné dans un canal.

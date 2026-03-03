@@ -181,17 +181,6 @@ public class MessageAppMainView {
             }
         });
 
-        userListPanel.addSelectionListener(new javax.swing.event.ListSelectionListener() {
-            @Override
-            public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    main.java.com.ubo.tp.message.datamodel.User selected = userListPanel.getSelectedUser();
-                    if (selected != null) {
-                        messageView.getController().setCurrentRecipient(selected.getUuid(), selected.getName());
-                    }
-                }
-            }
-        });
     }
 
     /**
