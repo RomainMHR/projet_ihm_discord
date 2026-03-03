@@ -74,6 +74,14 @@ public class ChannelListPanel extends JPanel {
         }
     }
 
+    public void addSelectionListener(javax.swing.event.ListSelectionListener listener) {
+        mChannelList.addListSelectionListener(listener);
+    }
+
+    public Channel getSelectedChannel() {
+        return mChannelList.getSelectedValue();
+    }
+
     /**
      * Renderer simple pour afficher le nom du canal.
      */

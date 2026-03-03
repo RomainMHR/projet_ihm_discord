@@ -1,0 +1,45 @@
+package main.java.com.ubo.tp.message.ihm.message;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
+
+import main.java.com.ubo.tp.message.core.DataManager;
+import main.java.com.ubo.tp.message.core.session.ISession;
+
+/**
+ * Vue principale des messages (Liste + Input) gérée par le MessageController.
+ */
+public class MessageView extends JPanel {
+
+    protected MessageController mController;
+    protected MessageListPanel mListPanel;
+    protected MessageInputPanel mInputPanel;
+    protected javax.swing.JLabel mTitleLabel;
+
+    public MessageView(DataManager dataManager, ISession session) {
+        this.setLayout(new BorderLayout());
+
+        this.mController = new MessageController(dataManager, session);
+        this.mController.setMainView(this);
+
+        this.mTitleLabel = new javax.swing.JLabel("Sélectionnez une conversation", javax.swing.SwingConstants.CENTER);
+        this.mTitleLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
+        this.mTitleLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        this.mListPanel = new MessageListPanel(mController);
+        this.mInputPanel = new MessageInputPanel(mController);
+
+        this.add(mTitleLabel, BorderLayout.NORTH);
+        this.add(mListPanel, BorderLayout.CENTER);
+        this.add(mInputPanel, BorderLayout.SOUTH);
+    }
+
+    public MessageController getController() {
+        return mController;
+    }
+
+    public void setChatTitle(String title) {
+        this.mTitleLabel.setText(title);
+    }
+}

@@ -145,21 +145,53 @@ public class MessageAppMainView {
     protected JPanel mCurrentContent;
 
     protected void initContent() {
+        // Création du contrôleur et de la vue des messages
+        main.java.com.ubo.tp.message.ihm.message.MessageView messageView = new main.java.com.ubo.tp.message.ihm.message.MessageView(
+                mDataManager, mSession);
+
         // Création du contrôleur et de la vue des canaux
         main.java.com.ubo.tp.message.ihm.channel.ChannelController channelController = new main.java.com.ubo.tp.message.ihm.channel.ChannelController(
                 mDataManager, mSession);
-        main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel channelListPanel = new main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel(
+        final main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel channelListPanel = new main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel(
                 channelController);
 
-        // Utilisation de la méthode pour définir le panneau
-        this.setMainPanel(channelListPanel);
+        // Ajout de la liste des canaux à gauche
+        mFrame.add(channelListPanel, BorderLayout.WEST);
 
         // Ajout de la liste des utilisateurs à droite
         main.java.com.ubo.tp.message.ihm.user.UserController userController = new main.java.com.ubo.tp.message.ihm.user.UserController(
                 mDataManager, mSession);
-        main.java.com.ubo.tp.message.ihm.user.UserListPanel userListPanel = new main.java.com.ubo.tp.message.ihm.user.UserListPanel(
+        final main.java.com.ubo.tp.message.ihm.user.UserListPanel userListPanel = new main.java.com.ubo.tp.message.ihm.user.UserListPanel(
                 userController);
         mFrame.add(userListPanel, BorderLayout.EAST);
+
+        // Au centre : les messages
+        this.setMainPanel(messageView);
+
+        // Listeners pour mettre à jour les messages selon la sélection
+        channelListPanel.addSelectionListener(new javax.swing.event.ListSelectionListener() {
+            @Override
+            public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    main.java.com.ubo.tp.message.datamodel.Channel selected = channelListPanel.getSelectedChannel();
+                    if (selected != null) {
+                        messageView.getController().setCurrentRecipient(selected.getUuid(), selected.getName());
+                    }
+                }
+            }
+        });
+
+        userListPanel.addSelectionListener(new javax.swing.event.ListSelectionListener() {
+            @Override
+            public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    main.java.com.ubo.tp.message.datamodel.User selected = userListPanel.getSelectedUser();
+                    if (selected != null) {
+                        messageView.getController().setCurrentRecipient(selected.getUuid(), selected.getName());
+                    }
+                }
+            }
+        });
     }
 
     /**

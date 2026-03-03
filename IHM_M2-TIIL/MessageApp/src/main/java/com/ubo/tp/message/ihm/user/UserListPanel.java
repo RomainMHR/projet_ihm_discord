@@ -55,6 +55,14 @@ public class UserListPanel extends JPanel {
         }
     }
 
+    public void addSelectionListener(javax.swing.event.ListSelectionListener listener) {
+        mUserList.addListSelectionListener(listener);
+    }
+
+    public User getSelectedUser() {
+        return mUserList.getSelectedValue();
+    }
+
     /**
      * Renderer simple pour afficher le nom de l'utilisateur.
      */
