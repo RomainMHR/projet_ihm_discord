@@ -2,9 +2,7 @@ package main.java.com.ubo.tp.message.ihm.login;
 
 import java.util.UUID;
 
-import javax.swing.JOptionPane;
-
-import main.java.com.ubo.tp.message.ihm.MessageApp;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.datamodel.User;
@@ -15,36 +13,29 @@ import main.java.com.ubo.tp.message.datamodel.User;
 public class RegisterController {
 
     protected DataManager mDataManager;
-    protected MessageApp mMessageApp;
-    protected RegisterView mView;
+    protected IMessageApp mMessageApp;
 
-    public RegisterController(MessageApp messageApp, DataManager dataManager) {
+    public RegisterController(IMessageApp messageApp, DataManager dataManager) {
         this.mMessageApp = messageApp;
         this.mDataManager = dataManager;
-    }
-
-    public void setView(RegisterView view) {
-        this.mView = view;
     }
 
     public void register(String name, String tag, String password, String confirmPassword) {
         // SRS-MAP-USR-002 : Nom et Tag obligatoires
         if (name.trim().isEmpty() || tag.trim().isEmpty() || password.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(mView, "Tous les champs sont obligatoires.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
+            mMessageApp.showErrorMessage("Tous les champs sont obligatoires.");
             return;
         }
 
         if (!password.equals(confirmPassword)) {
-            JOptionPane.showMessageDialog(mView, "Les mots de passe ne correspondent pas.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
+            mMessageApp.showErrorMessage("Les mots de passe ne correspondent pas.");
             return;
         }
 
         // SRS-MAP-USR-003 : Tag unique
         for (User user : mDataManager.getUsers()) {
             if (user.getUserTag().equals(tag)) {
-                JOptionPane.showMessageDialog(mView, "Ce tag est déjà utilisé.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                mMessageApp.showErrorMessage("Ce tag est déjà utilisé.");
                 return;
             }
         }
@@ -53,7 +44,7 @@ public class RegisterController {
         User newUser = new User(UUID.randomUUID(), tag, password, name);
         mDataManager.sendUser(newUser);
 
-        JOptionPane.showMessageDialog(mView, "Compte créé avec succès !", "Succès", JOptionPane.INFORMATION_MESSAGE);
+        mMessageApp.showInformationMessage("Compte créé avec succès !");
         mMessageApp.showLoginView();
     }
 

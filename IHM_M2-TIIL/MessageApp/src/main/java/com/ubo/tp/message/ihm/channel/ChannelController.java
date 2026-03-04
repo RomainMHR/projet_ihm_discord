@@ -1,15 +1,13 @@
 package main.java.com.ubo.tp.message.ihm.channel;
 
-import java.util.Set;
-
-import javax.swing.JOptionPane;
-
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.database.IDatabaseObserver;
 import main.java.com.ubo.tp.message.core.session.ISession;
 import main.java.com.ubo.tp.message.datamodel.Channel;
 import main.java.com.ubo.tp.message.datamodel.Message;
 import main.java.com.ubo.tp.message.datamodel.User;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
+import main.java.com.ubo.tp.message.ihm.interfaces.IChannelListView;
 
 /**
  * Contrôleur pour la gestion des canaux.
@@ -18,9 +16,11 @@ public class ChannelController implements IDatabaseObserver {
 
     protected DataManager mDataManager;
     protected ISession mSession;
-    protected ChannelListPanel mView;
+    protected IMessageApp mMessageApp;
+    protected IChannelListView mView;
 
-    public ChannelController(DataManager dataManager, ISession session) {
+    public ChannelController(IMessageApp messageApp, DataManager dataManager, ISession session) {
+        this.mMessageApp = messageApp;
         this.mDataManager = dataManager;
         this.mSession = session;
 
@@ -28,7 +28,7 @@ public class ChannelController implements IDatabaseObserver {
         this.mDataManager.addObserver(this);
     }
 
-    public void setView(ChannelListPanel view) {
+    public void setView(IChannelListView view) {
         this.mView = view;
         this.refreshView();
     }
@@ -41,15 +41,13 @@ public class ChannelController implements IDatabaseObserver {
 
     public void createChannel(String channelName) {
         if (channelName == null || channelName.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(mView, "Le nom du canal ne peut pas être vide.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
+            mMessageApp.showErrorMessage("Le nom du canal ne peut pas être vide.");
             return;
         }
 
         User creator = mSession.getConnectedUser();
         if (creator == null) {
-            JOptionPane.showMessageDialog(mView, "Vous devez être connecté pour créer un canal.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
+            mMessageApp.showErrorMessage("Vous devez être connecté pour créer un canal.");
             return;
         }
 

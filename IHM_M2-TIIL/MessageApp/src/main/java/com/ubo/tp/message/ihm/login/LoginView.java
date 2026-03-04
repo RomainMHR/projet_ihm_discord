@@ -28,7 +28,6 @@ public class LoginView extends JPanel {
 
     public LoginView(LoginController controller) {
         this.mController = controller;
-        this.mController.setView(this);
         this.initGUI();
     }
 

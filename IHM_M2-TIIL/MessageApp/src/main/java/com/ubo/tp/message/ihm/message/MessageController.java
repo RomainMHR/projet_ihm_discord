@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.swing.JOptionPane;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageInputView;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageListView;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageMainView;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.database.IDatabaseObserver;
@@ -23,30 +26,32 @@ public class MessageController implements IDatabaseObserver {
 
     protected DataManager mDataManager;
     protected ISession mSession;
-    protected MessageInputPanel mView;
-    protected MessageListPanel mListView;
-    protected MessageView mMainView;
+    protected IMessageApp mMessageApp;
+    protected IMessageInputView mView;
+    protected IMessageListView mListView;
+    protected IMessageMainView mMainView;
 
     /**
      * Destinataire actuellement sélectionné (Canal ou Utilisateur)
      */
     protected UUID mCurrentRecipientUuid;
 
-    public MessageController(DataManager dataManager, ISession session) {
+    public MessageController(IMessageApp messageApp, DataManager dataManager, ISession session) {
+        this.mMessageApp = messageApp;
         this.mDataManager = dataManager;
         this.mSession = session;
         this.mDataManager.addObserver(this);
     }
 
-    public void setMainView(MessageView view) {
+    public void setMainView(IMessageMainView view) {
         this.mMainView = view;
     }
 
-    public void setView(MessageInputPanel view) {
+    public void setView(IMessageInputView view) {
         this.mView = view;
     }
 
-    public void setListView(MessageListPanel view) {
+    public void setListView(IMessageListView view) {
         this.mListView = view;
         this.refreshListView();
     }
@@ -116,16 +121,14 @@ public class MessageController implements IDatabaseObserver {
         }
 
         if (mCurrentRecipientUuid == null) {
-            JOptionPane.showMessageDialog(mView,
-                    "Veuillez sélectionner un destinataire (canal ou utilisateur) avant d'envoyer un message.",
-                    "Erreur", JOptionPane.WARNING_MESSAGE);
+            mMessageApp.showErrorMessage(
+                    "Veuillez sélectionner un destinataire (canal ou utilisateur) avant d'envoyer un message.");
             return;
         }
 
         User sender = mSession.getConnectedUser();
         if (sender == null) {
-            JOptionPane.showMessageDialog(mView, "Vous devez être connecté pour envoyer un message.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
+            mMessageApp.showErrorMessage("Vous devez être connecté pour envoyer un message.");
             return;
         }
 

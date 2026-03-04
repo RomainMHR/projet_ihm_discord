@@ -10,6 +10,7 @@ import main.java.com.ubo.tp.message.core.session.ISession;
 import main.java.com.ubo.tp.message.datamodel.Channel;
 import main.java.com.ubo.tp.message.datamodel.Message;
 import main.java.com.ubo.tp.message.datamodel.User;
+import main.java.com.ubo.tp.message.ihm.interfaces.IUserListView;
 
 /**
  * Contrôleur pour la gestion des utilisateurs.
@@ -18,7 +19,7 @@ public class UserController implements IDatabaseObserver {
 
     protected DataManager mDataManager;
     protected ISession mSession;
-    protected UserListPanel mView;
+    protected IUserListView mView;
 
     public UserController(DataManager dataManager, ISession session) {
         this.mDataManager = dataManager;
@@ -28,7 +29,7 @@ public class UserController implements IDatabaseObserver {
         this.mDataManager.addObserver(this);
     }
 
-    public void setView(UserListPanel view) {
+    public void setView(IUserListView view) {
         this.mView = view;
         this.refreshView();
     }

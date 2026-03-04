@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.session.Session;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
 
 /**
  * Classe de la vue principale de l'application.
@@ -35,8 +36,10 @@ public class MessageAppMainView {
     protected JMenuItem mLogoutItem;
 
     protected DataManager mDataManager;
+    protected IMessageApp mMessageApp;
 
-    public MessageAppMainView(Session mSession, DataManager dataManager) {
+    public MessageAppMainView(IMessageApp messageApp, Session mSession, DataManager dataManager) {
+        this.mMessageApp = messageApp;
         this.mSession = mSession;
         this.mDataManager = dataManager;
         this.initGUI();
@@ -192,11 +195,11 @@ public class MessageAppMainView {
     protected void initContent() {
         // Création du contrôleur et de la vue des messages
         main.java.com.ubo.tp.message.ihm.message.MessageView messageView = new main.java.com.ubo.tp.message.ihm.message.MessageView(
-                mDataManager, mSession);
+                mMessageApp, mDataManager, mSession);
 
         // Création du contrôleur et de la vue des canaux
         main.java.com.ubo.tp.message.ihm.channel.ChannelController channelController = new main.java.com.ubo.tp.message.ihm.channel.ChannelController(
-                mDataManager, mSession);
+                mMessageApp, mDataManager, mSession);
         final main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel channelListPanel = new main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel(
                 channelController);
 

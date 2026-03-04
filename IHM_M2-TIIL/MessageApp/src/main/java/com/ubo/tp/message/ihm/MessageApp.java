@@ -13,13 +13,15 @@ import main.java.com.ubo.tp.message.ihm.login.LoginView;
 import main.java.com.ubo.tp.message.ihm.login.RegisterController;
 import main.java.com.ubo.tp.message.ihm.login.RegisterView;
 import main.java.com.ubo.tp.message.core.session.ISessionObserver;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
+import javax.swing.JOptionPane;
 
 /**
  * Classe principale l'application.
  *
  * @author S.Lucas
  */
-public class MessageApp implements ISessionObserver {
+public class MessageApp implements ISessionObserver, IMessageApp {
 	/**
 	 * Base de données.
 	 */
@@ -200,7 +202,7 @@ public class MessageApp implements ISessionObserver {
 		}
 
 		if (mMainView == null) {
-			this.mMainView = new MessageAppMainView(mSession, mDataManager);
+			this.mMainView = new MessageAppMainView(this, mSession, mDataManager);
 		}
 		this.mMainView.show();
 	}
@@ -218,5 +220,17 @@ public class MessageApp implements ISessionObserver {
 	@Override
 	public void notifyLogin(User user) {
 		this.showMainView();
+	}
+
+	@Override
+	public void showErrorMessage(String message) {
+		JOptionPane.showMessageDialog(mLoginFrame != null ? mLoginFrame : (mMainView != null ? mMainView.mFrame : null),
+				message, "Erreur", JOptionPane.ERROR_MESSAGE);
+	}
+
+	@Override
+	public void showInformationMessage(String message) {
+		JOptionPane.showMessageDialog(mLoginFrame != null ? mLoginFrame : (mMainView != null ? mMainView.mFrame : null),
+				message, "Information", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

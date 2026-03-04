@@ -43,5 +43,11 @@ public class MessageAppLauncher {
 		messageApp.init();
 		messageApp.show();
 
+		// Lancement de l'interface JavaFX en parallèle
+		main.java.com.ubo.tp.message.ihm.MessageAppFx.setSharedDataManager(dataManager);
+		new Thread(() -> {
+			javafx.application.Application.launch(main.java.com.ubo.tp.message.ihm.MessageAppFx.class, args);
+		}).start();
+
 	}
 }

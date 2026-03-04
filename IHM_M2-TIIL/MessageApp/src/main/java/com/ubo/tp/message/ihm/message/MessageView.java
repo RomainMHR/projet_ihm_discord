@@ -6,21 +6,23 @@ import javax.swing.JPanel;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.session.ISession;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageMainView;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
 
 /**
  * Vue principale des messages (Liste + Input) gérée par le MessageController.
  */
-public class MessageView extends JPanel {
+public class MessageView extends JPanel implements IMessageMainView {
 
     protected MessageController mController;
     protected MessageListPanel mListPanel;
     protected MessageInputPanel mInputPanel;
     protected javax.swing.JLabel mTitleLabel;
 
-    public MessageView(DataManager dataManager, ISession session) {
+    public MessageView(IMessageApp app, DataManager dataManager, ISession session) {
         this.setLayout(new BorderLayout());
 
-        this.mController = new MessageController(dataManager, session);
+        this.mController = new MessageController(app, dataManager, session);
         this.mController.setMainView(this);
 
         this.mTitleLabel = new javax.swing.JLabel("Sélectionnez une conversation", javax.swing.SwingConstants.CENTER);
@@ -39,6 +41,7 @@ public class MessageView extends JPanel {
         return mController;
     }
 
+    @Override
     public void setChatTitle(String title) {
         this.mTitleLabel.setText(title);
     }

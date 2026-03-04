@@ -15,11 +15,12 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import main.java.com.ubo.tp.message.datamodel.Channel;
+import main.java.com.ubo.tp.message.ihm.interfaces.IChannelListView;
 
 /**
  * Vue pour afficher la liste des canaux et en créer de nouveaux.
  */
-public class ChannelListPanel extends JPanel {
+public class ChannelListPanel extends JPanel implements IChannelListView {
 
     protected ChannelController mController;
     protected JList<Channel> mChannelList;
@@ -67,6 +68,7 @@ public class ChannelListPanel extends JPanel {
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    @Override
     public void updateChannelList(Set<Channel> channels) {
         mListModel.clear();
         for (Channel channel : channels) {

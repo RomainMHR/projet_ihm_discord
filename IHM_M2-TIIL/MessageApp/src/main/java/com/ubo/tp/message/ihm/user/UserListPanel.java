@@ -12,11 +12,12 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import main.java.com.ubo.tp.message.datamodel.User;
+import main.java.com.ubo.tp.message.ihm.interfaces.IUserListView;
 
 /**
  * Vue pour afficher la liste des utilisateurs.
  */
-public class UserListPanel extends JPanel {
+public class UserListPanel extends JPanel implements IUserListView {
 
     protected UserController mController;
     protected JList<User> mUserList;
@@ -48,6 +49,7 @@ public class UserListPanel extends JPanel {
         this.add(scrollPane, BorderLayout.CENTER);
     }
 
+    @Override
     public void updateUserList(Set<User> users) {
         mListModel.clear();
         for (User user : users) {

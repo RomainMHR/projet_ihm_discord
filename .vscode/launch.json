@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "MessageAppLauncher",
+            "request": "launch",
+            "mainClass": "main.java.com.ubo.tp.message.MessageAppLauncher",
+            "projectName": "MessageApp",
+            "vmArgs": "--module-path \"${workspaceFolder}/IHM_M2-TIIL/MessageApp/lib/javafx-sdk-21.0.5/lib\" --add-modules javafx.controls,javafx.fxml,javafx.graphics"
+        }
+    ]
+}

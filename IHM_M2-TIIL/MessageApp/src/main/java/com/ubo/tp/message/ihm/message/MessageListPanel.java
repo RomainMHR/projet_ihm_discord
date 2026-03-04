@@ -12,11 +12,12 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import main.java.com.ubo.tp.message.datamodel.Message;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageListView;
 
 /**
  * Vue pour afficher la liste des messages d'une conversation.
  */
-public class MessageListPanel extends JPanel {
+public class MessageListPanel extends JPanel implements IMessageListView {
 
     protected MessageController mController;
     protected JList<Message> mMessageList;
@@ -41,6 +42,7 @@ public class MessageListPanel extends JPanel {
         this.add(scrollPane, BorderLayout.CENTER);
     }
 
+    @Override
     public void updateMessageList(List<Message> messages) {
         mListModel.clear();
         for (Message message : messages) {

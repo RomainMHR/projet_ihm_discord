@@ -30,7 +30,6 @@ public class RegisterView extends JPanel {
 
         public RegisterView(RegisterController controller) {
                 this.mController = controller;
-                this.mController.setView(this);
                 this.initGUI();
         }
 
