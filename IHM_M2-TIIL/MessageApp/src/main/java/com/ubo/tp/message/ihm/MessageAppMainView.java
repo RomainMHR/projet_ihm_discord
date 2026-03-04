@@ -224,6 +224,9 @@ public class MessageAppMainView {
                     main.java.com.ubo.tp.message.datamodel.Channel selected = channelListPanel.getSelectedChannel();
                     if (selected != null) {
                         messageView.getController().setCurrentRecipient(selected.getUuid(), selected.getName());
+                        userController.setCurrentChannelFilter(selected);
+                    } else {
+                        userController.setCurrentChannelFilter(null);
                     }
                 }
             }

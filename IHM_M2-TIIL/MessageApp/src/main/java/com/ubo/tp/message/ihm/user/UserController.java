@@ -29,17 +29,31 @@ public class UserController implements IDatabaseObserver {
         this.mDataManager.addObserver(this);
     }
 
+    protected Channel mCurrentChannelFilter;
+
     public void setView(IUserListView view) {
         this.mView = view;
+        this.refreshView();
+    }
+
+    public void setCurrentChannelFilter(Channel channel) {
+        this.mCurrentChannelFilter = channel;
         this.refreshView();
     }
 
     protected void refreshView() {
         if (mView != null) {
             Set<User> users = new HashSet<>();
-            for (User user : mDataManager.getUsers()) {
-                if (!user.getUuid().equals(Constants.UNKNONWN_USER_UUID)) {
-                    users.add(user);
+
+            if (mCurrentChannelFilter != null && mCurrentChannelFilter.isPrivate()) {
+                // Obtenir les membres du canal privé uniquement
+                users.addAll(mCurrentChannelFilter.getUsers());
+            } else {
+                // Si canal public ou pas de canal, tous les utilisateurs
+                for (User user : mDataManager.getUsers()) {
+                    if (!user.getUuid().equals(Constants.UNKNONWN_USER_UUID)) {
+                        users.add(user);
+                    }
                 }
             }
             mView.updateUserList(users);
@@ -90,6 +104,9 @@ public class UserController implements IDatabaseObserver {
 
     @Override
     public void notifyChannelModified(Channel channel) {
-        // Pas d'action pour l'instant
+        if (mCurrentChannelFilter != null && mCurrentChannelFilter.getUuid().equals(channel.getUuid())) {
+            this.mCurrentChannelFilter = channel;
+            this.refreshView();
+        }
     }
 }
