@@ -120,6 +120,11 @@ public class MessageController implements IDatabaseObserver {
             return;
         }
 
+        if (text.length() > 200) {
+            mMessageApp.showErrorMessage("Le message est trop long. Il ne doit pas dépasser 200 caractères.");
+            return;
+        }
+
         if (mCurrentRecipientUuid == null) {
             mMessageApp.showErrorMessage(
                     "Veuillez sélectionner un destinataire (canal ou utilisateur) avant d'envoyer un message.");
