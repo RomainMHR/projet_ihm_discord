@@ -91,6 +91,13 @@ public class Channel extends AbstractMessageAppObject implements IMessageRecipie
 	}
 
 	/**
+	 * @return boolean indiquant si le canal est privé.
+	 */
+	public boolean isPrivate() {
+		return mPrivate;
+	}
+
+	/**
 	 * @return le corps du message.
 	 */
 	public String getName() {
@@ -102,6 +109,24 @@ public class Channel extends AbstractMessageAppObject implements IMessageRecipie
 	 */
 	public List<User> getUsers() {
 		return new ArrayList<User>(mUsers);
+	}
+
+	/**
+	 * Ajoute un utilisateur au canal privé.
+	 */
+	public void addUser(User user) {
+		if (mPrivate && user != null) {
+			mUsers.add(user);
+		}
+	}
+
+	/**
+	 * Supprime un utilisateur du canal privé.
+	 */
+	public void removeUser(User user) {
+		if (mPrivate && user != null) {
+			mUsers.remove(user);
+		}
 	}
 
 	/**

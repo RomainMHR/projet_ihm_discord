@@ -155,6 +155,19 @@ public class DataFilesManager {
 	}
 
 	/**
+	 * Suppression d'un fichier pour un canal ({@link Channel}).
+	 *
+	 * @param channel Canal à supprimer.
+	 */
+	public void deleteChannelFile(Channel channel) {
+		String destFileName = this.getFileName(channel.getUuid(), Constants.CHANNEL_FILE_EXTENSION);
+		File file = new File(destFileName);
+		if (file.exists()) {
+			file.delete();
+		}
+	}
+
+	/**
 	 * Lecture du fichier de propriété pour un {@link Channel}
 	 *
 	 * @param channelFile
@@ -279,7 +292,7 @@ public class DataFilesManager {
 
 		Iterator<User> iterator = users.iterator();
 		while (iterator.hasNext()) {
-			usersAsString += iterator.next();
+			usersAsString += iterator.next().getUuid().toString();
 
 			if (iterator.hasNext()) {
 				usersAsString += USER_SEPARATOR;

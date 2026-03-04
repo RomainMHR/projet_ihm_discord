@@ -122,6 +122,15 @@ public class DataManager {
 	}
 
 	/**
+	 * Supprime un Canal.
+	 *
+	 * @param channel
+	 */
+	public void deleteChannel(Channel channel) {
+		this.mEntityManager.deleteChannelFile(channel);
+	}
+
+	/**
 	 * Retourne tous les Messages d'un utilisateur.
 	 *
 	 * @param user utilisateur dont les messages sont à rechercher.

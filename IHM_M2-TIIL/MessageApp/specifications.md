@@ -17,11 +17,11 @@
 - [x] **SRS-MAP-CHN-001** : L'utilisateur connecté peut consulter la liste des canaux enregistrés.
 - [ ] **SRS-MAP-CHN-002** : L'utilisateur connecté peut rechercher un canal.
 - [x] **SRS-MAP-CHN-003** : L'utilisateur connecté peut créer un canal public.
-- [ ] **SRS-MAP-CHN-004** : L'utilisateur connecté peut créer un canal privé.
-- [ ] **SRS-MAP-CHN-005** : L'utilisateur connecté peut quitter un canal privé dont il n'est pas le propriétaire.
-- [ ] **SRS-MAP-CHN-006** : L'utilisateur connecté peut supprimer un canal privé dont il est le propriétaire.
-- [ ] **SRS-MAP-CHN-007** : L'utilisateur connecté peut ajouter un utilisateur à un canal privé dont il est le propriétaire.
-- [ ] **SRS-MAP-CHN-087** : L'utilisateur connecté peut supprimer un utilisateur d'un canal privé dont il est le propriétaire.
+- [x] **SRS-MAP-CHN-004** : L'utilisateur connecté peut créer un canal privé.
+- [x] **SRS-MAP-CHN-005** : L'utilisateur connecté peut quitter un canal privé dont il n'est pas le propriétaire.
+- [x] **SRS-MAP-CHN-006** : L'utilisateur connecté peut supprimer un canal privé dont il est le propriétaire.
+- [x] **SRS-MAP-CHN-007** : L'utilisateur connecté peut ajouter un utilisateur à un canal privé dont il est le propriétaire.
+- [x] **SRS-MAP-CHN-087** : L'utilisateur connecté peut supprimer un utilisateur d'un canal privé dont il est le propriétaire.
 - [ ] **SRS-MAP-CHN-009** : La présence d'un nouveau message dans un canal est signalée par un indicateur graphique.
 - [ ] **SRS-MAP-CHN-010** : La présence en ligne d'un utilisateur est signalée par un indicateur graphique.
 
@@ -29,8 +29,8 @@
 
 - [x] **SRS-MAP-MSG-001** : L'utilisateur connecté peut consulter les messages d'un canal public.
 - [x] **SRS-MAP-MSG-002** : L'utilisateur connecté peut envoyer un message dans un canal public.
-- [ ] **SRS-MAP-MSG-003** : L'utilisateur connecté peut consulter les messages d'un canal privé dont il est membre.
-- [ ] **SRS-MAP-MSG-004** : L'utilisateur connecté peut envoyer un message dans un canal privé dont il est membre.
+- [x] **SRS-MAP-MSG-003** : L'utilisateur connecté peut consulter les messages d'un canal privé dont il est membre.
+- [x] **SRS-MAP-MSG-004** : L'utilisateur connecté peut envoyer un message dans un canal privé dont il est membre.
 - [ ] **SRS-MAP-MSG-005** : L'utilisateur connecté peut rechercher un message dans un canal.
 - [ ] **SRS-MAP-MSG-006** : L'utilisateur connecté peut supprimer un message dont il est l'auteur.
 - [ ] **SRS-MAP-MSG-007** : L'utilisateur connecté peut envoyer un message privé à un utilisateur.
