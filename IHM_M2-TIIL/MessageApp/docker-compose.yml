@@ -1,5 +1,9 @@
 version: '3.8'
 
+networks:
+  ci-network:
+    driver: bridge
+
 services:
   sonarqube:
     image: sonarqube:lts-community
@@ -12,6 +16,8 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_extensions:/opt/sonarqube/extensions
+    networks:
+      - ci-network
 
   jenkins:
     image: jenkins/jenkins:lts
@@ -21,6 +27,8 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
+    networks:
+      - ci-network
 
 volumes:
   sonarqube_data:

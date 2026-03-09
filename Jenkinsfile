@@ -36,7 +36,7 @@ pipeline {
             steps {
                 // Lancer l'analyse Sonar
                 dir('IHM_M2-TIIL/MessageApp') {
-                    sh './gradlew sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.host.url=$SONAR_HOST_URL'
+                    sh './gradlew sonar -Dsonar.token=$SONAR_TOKEN -Dsonar.host.url=$SONAR_HOST_URL'
                 }
             }
         }
