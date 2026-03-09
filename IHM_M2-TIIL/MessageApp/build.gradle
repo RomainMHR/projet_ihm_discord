@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+    id "org.sonarqube" version "6.0.1.5171"
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'com.ubo.tp.message'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+javafx {
+    version = "21.0.5"
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.media', 'javafx.web' ]
+}
+
+application {
+    mainClass = 'main.java.com.ubo.tp.message.MessageAppLauncher'
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'main.java.com.ubo.tp.message.MessageAppLauncher'
+    }
+}
+
+sonar {
+  properties {
+    property "sonar.projectKey", "MessageApp"
+    property "sonar.projectName", "MessageApp"
+    property "sonar.host.url", "http://localhost:9000"
+    property "sonar.login", "admin"
+    property "sonar.password", "admin"
+  }
+}
+
