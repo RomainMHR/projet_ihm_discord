@@ -89,7 +89,10 @@ public class ChannelController implements IDatabaseObserver {
             for (Channel c : allChannels) {
                 // Filtre de visibilité (privé/public)
                 boolean visible = false;
-                if (!c.isPrivate()) {
+                if (c.isDirectMessage()) {
+                    // Les canaux DM ne sont jamais affichés dans la liste
+                    visible = false;
+                } else if (!c.isPrivate()) {
                     visible = true;
                 } else if (currentUser != null && c.getUsers().contains(currentUser)) {
                     visible = true;
@@ -143,6 +146,42 @@ public class ChannelController implements IDatabaseObserver {
 
         Channel newChannel = new Channel(creator, channelName, initialUsers);
         mDataManager.sendChannel(newChannel);
+    }
+
+    /**
+     * Cherche un canal DM existant entre l'utilisateur connecté et l'utilisateur
+     * cible.
+     * S'il n'existe pas, en crée un nouveau.
+     */
+    public Channel findOrCreateDirectMessageChannel(User targetUser) {
+        User currentUser = mSession.getConnectedUser();
+        if (currentUser == null || targetUser == null) {
+            return null;
+        }
+
+        // Empêcher l'envoi de message à soi-même
+        if (currentUser.getUuid().equals(targetUser.getUuid())) {
+            return null;
+        }
+
+        // Chercher un canal DM existant entre les deux utilisateurs
+        for (Channel c : mDataManager.getChannels()) {
+            if (c.isDirectMessage() && c.getUsers().size() == 2
+                    && c.getUsers().contains(currentUser)
+                    && c.getUsers().contains(targetUser)) {
+                return c;
+            }
+        }
+
+        // Créer un nouveau canal DM
+        java.util.List<User> dmUsers = new java.util.ArrayList<>();
+        dmUsers.add(currentUser);
+        dmUsers.add(targetUser);
+        Channel dmChannel = new Channel(currentUser, "DM-" + currentUser.getName() + "-" + targetUser.getName(),
+                dmUsers);
+        dmChannel.setDirectMessage(true);
+        mDataManager.sendChannel(dmChannel);
+        return dmChannel;
     }
 
     public void deleteChannel(Channel channel) {

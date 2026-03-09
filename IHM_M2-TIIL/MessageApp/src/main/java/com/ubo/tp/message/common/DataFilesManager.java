@@ -77,6 +77,11 @@ public class DataFilesManager {
 	protected static final String PROPERTY_KEY_CHANNEL_USERS = "Users";
 
 	/**
+	 * Clé du fichier de propriété pour l'attribut DirectMessage
+	 */
+	protected static final String PROPERTY_KEY_DIRECT_MESSAGE = "DirectMessage";
+
+	/**
 	 * Séparateur pour les utilisateurs.
 	 */
 	protected static final String USER_SEPARATOR = ";";
@@ -158,6 +163,7 @@ public class DataFilesManager {
 		properties.setProperty(PROPERTY_KEY_NAME, channel.getName());
 		properties.setProperty(PROPERTY_KEY_CHANNEL_CREATOR, channel.getCreator().getUuid().toString());
 		properties.setProperty(PROPERTY_KEY_CHANNEL_USERS, this.getUsersAsString(channel.getUsers()));
+		properties.setProperty(PROPERTY_KEY_DIRECT_MESSAGE, String.valueOf(channel.isDirectMessage()));
 
 		PropertiesManager.writeProperties(properties, destFileName);
 	}
@@ -198,6 +204,9 @@ public class DataFilesManager {
 			List<User> allUsers = this.getUsersFromString(channelUsers, userMap);
 
 			channel = new Channel(UUID.fromString(uuid), creator, channelName, allUsers);
+
+			String directMessage = properties.getProperty(PROPERTY_KEY_DIRECT_MESSAGE, "false");
+			channel.setDirectMessage(Boolean.parseBoolean(directMessage));
 		}
 
 		return channel;

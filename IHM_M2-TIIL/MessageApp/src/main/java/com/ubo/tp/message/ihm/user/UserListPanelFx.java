@@ -1,6 +1,7 @@
 package main.java.com.ubo.tp.message.ihm.user;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -15,6 +16,7 @@ public class UserListPanelFx extends BorderPane implements IUserListView {
 
     protected UserController mController;
     protected ListView<User> mUserList;
+    private Consumer<User> onUserSelected;
 
     public UserListPanelFx(UserController controller) {
         this.mController = controller;
@@ -50,10 +52,17 @@ public class UserListPanelFx extends BorderPane implements IUserListView {
             }
         });
 
-        // On désactive la sélection pour empêcher les conversations privées
-        mUserList.setSelectionModel(null);
+        mUserList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (onUserSelected != null && newVal != null) {
+                onUserSelected.accept(newVal);
+            }
+        });
 
         this.setCenter(mUserList);
+    }
+
+    public void setOnUserSelected(Consumer<User> listener) {
+        this.onUserSelected = listener;
     }
 
     @Override

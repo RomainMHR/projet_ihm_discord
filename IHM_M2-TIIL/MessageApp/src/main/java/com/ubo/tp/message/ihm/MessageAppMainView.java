@@ -243,6 +243,23 @@ public class MessageAppMainView {
             }
         });
 
+        userListPanel.addSelectionListener(new javax.swing.event.ListSelectionListener() {
+            @Override
+            public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    main.java.com.ubo.tp.message.datamodel.User selectedUser = userListPanel.getSelectedUser();
+                    if (selectedUser != null) {
+                        main.java.com.ubo.tp.message.datamodel.Channel dmChannel = channelController
+                                .findOrCreateDirectMessageChannel(selectedUser);
+                        if (dmChannel != null) {
+                            messageView.getController().setCurrentRecipient(dmChannel.getUuid(),
+                                    selectedUser.getName());
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     /**

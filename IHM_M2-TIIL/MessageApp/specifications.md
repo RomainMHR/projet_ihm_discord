@@ -33,7 +33,7 @@
 - [x] **SRS-MAP-MSG-004** : L'utilisateur connecté peut envoyer un message dans un canal privé dont il est membre.
 - [x] **SRS-MAP-MSG-005** : L'utilisateur connecté peut rechercher un message dans un canal.
 - [x] **SRS-MAP-MSG-006** : L'utilisateur connecté peut supprimer un message dont il est l'auteur.
-- [ ] **SRS-MAP-MSG-007** : L'utilisateur connecté peut envoyer un message privé à un utilisateur.
+- [x] **SRS-MAP-MSG-007** : L'utilisateur connecté peut envoyer un message privé à un utilisateur.
 - [x] **SRS-MAP-MSG-008** : Le texte d'un message ne dépasse pas 200 caractères.
 - [ ] **SRS-MAP-MSG-009** : Lors de la rédaction d'un message, l'utilisateur connecté peut mentionner un autre utilisateur du canal en utilisant le caractère '@'.
 - [ ] **SRS-MAP-MSG-010** : Une notification avertit l'utilisateur connecté lorsqu'un utilisateur lui envoie un message direct ou lorsqu'il est mentionné dans un canal.

@@ -18,6 +18,7 @@ import main.java.com.ubo.tp.message.ihm.channel.ChannelListPanelFx;
 import main.java.com.ubo.tp.message.ihm.user.UserController;
 import main.java.com.ubo.tp.message.ihm.user.UserListPanelFx;
 import main.java.com.ubo.tp.message.ihm.message.MessageViewFx;
+import main.java.com.ubo.tp.message.datamodel.Channel;
 
 public class MessageAppMainViewFx extends BorderPane {
 
@@ -138,6 +139,15 @@ public class MessageAppMainViewFx extends BorderPane {
                 channelController.markChannelAsRead(channel.getUuid());
             } else {
                 userController.setCurrentChannelFilter(null);
+            }
+        });
+
+        userListPanel.setOnUserSelected(user -> {
+            if (user != null) {
+                Channel dmChannel = channelController.findOrCreateDirectMessageChannel(user);
+                if (dmChannel != null) {
+                    messageView.getController().setCurrentRecipient(dmChannel.getUuid(), user.getName());
+                }
             }
         });
 
