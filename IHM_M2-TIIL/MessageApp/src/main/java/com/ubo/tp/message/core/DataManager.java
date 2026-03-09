@@ -93,6 +93,15 @@ public class DataManager {
 	}
 
 	/**
+	 * Supprime un Message.
+	 *
+	 * @param message
+	 */
+	public void deleteMessage(Message message) {
+		this.mEntityManager.deleteMessageFile(message);
+	}
+
+	/**
 	 * Ecrit un Utilisateur.
 	 *
 	 * @param user

@@ -246,6 +246,19 @@ public class DataFilesManager {
 	}
 
 	/**
+	 * Suppression d'un fichier pour un message ({@link Message}).
+	 *
+	 * @param message Message à supprimer.
+	 */
+	public void deleteMessageFile(Message message) {
+		String destFileName = this.getFileName(message.getUuid(), Constants.MESSAGE_FILE_EXTENSION);
+		File file = new File(destFileName);
+		if (file.exists()) {
+			file.delete();
+		}
+	}
+
+	/**
 	 * Récupération de l'utilisateur identifié.
 	 * 
 	 * @param uuid

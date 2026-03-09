@@ -40,6 +40,36 @@ public class MessageListPanel extends JPanel implements IMessageListView {
 
         JScrollPane scrollPane = new JScrollPane(mMessageList);
         this.add(scrollPane, BorderLayout.CENTER);
+
+        // Menu contextuel pour supprimer un message
+        mMessageList.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseReleased(java.awt.event.MouseEvent e) {
+                if (javax.swing.SwingUtilities.isRightMouseButton(e) || e.isPopupTrigger()) {
+                    int row = mMessageList.locationToIndex(e.getPoint());
+                    if (row >= 0) {
+                        mMessageList.setSelectedIndex(row);
+                        Message selected = mMessageList.getSelectedValue();
+                        if (selected != null && mController.getConnectedUser() != null
+                                && selected.getSender().getUuid().equals(mController.getConnectedUser().getUuid())) {
+                            javax.swing.JPopupMenu menu = new javax.swing.JPopupMenu();
+                            javax.swing.JMenuItem deleteItem = new javax.swing.JMenuItem("Supprimer ce message");
+                            deleteItem.addActionListener(evt -> {
+                                int confirm = javax.swing.JOptionPane.showConfirmDialog(
+                                        MessageListPanel.this,
+                                        "Voulez-vous supprimer ce message ?",
+                                        "Confirmation", javax.swing.JOptionPane.YES_NO_OPTION);
+                                if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+                                    mController.deleteMessage(selected);
+                                }
+                            });
+                            menu.add(deleteItem);
+                            menu.show(e.getComponent(), e.getX(), e.getY());
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override

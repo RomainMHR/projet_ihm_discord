@@ -43,6 +43,10 @@ public class MessageController implements IDatabaseObserver {
         this.mDataManager.addObserver(this);
     }
 
+    public User getConnectedUser() {
+        return mSession.getConnectedUser();
+    }
+
     public void setMainView(IMessageMainView view) {
         this.mMainView = view;
     }
@@ -142,6 +146,21 @@ public class MessageController implements IDatabaseObserver {
     }
 
     // --- IDatabaseObserver ---
+
+    /**
+     * Supprime un message si l'utilisateur connecté en est l'auteur.
+     */
+    public void deleteMessage(Message message) {
+        User currentUser = mSession.getConnectedUser();
+        if (message == null || currentUser == null) {
+            return;
+        }
+        if (!message.getSender().getUuid().equals(currentUser.getUuid())) {
+            mMessageApp.showErrorMessage("Vous ne pouvez supprimer que vos propres messages.");
+            return;
+        }
+        mDataManager.deleteMessage(message);
+    }
 
     @Override
     public void notifyMessageAdded(Message message) {

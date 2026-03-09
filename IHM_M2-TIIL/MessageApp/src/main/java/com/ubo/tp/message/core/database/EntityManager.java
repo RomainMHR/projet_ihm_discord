@@ -438,6 +438,19 @@ public class EntityManager implements IWatchableDirectoryObserver {
 	}
 
 	/**
+	 * Suppression du fichier correspondant au message.
+	 *
+	 * @param message
+	 */
+	public void deleteMessageFile(Message message) {
+		if (mDirectoryPath != null) {
+			mDataFileManager.deleteMessageFile(message);
+		} else {
+			throw new RuntimeException("Le répertoire d'échange n'est pas configuré !");
+		}
+	}
+
+	/**
 	 * Génération du fichier correspondant à l'utilisateur.
 	 *
 	 * @param user

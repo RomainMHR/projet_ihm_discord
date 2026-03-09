@@ -35,9 +35,34 @@ public class MessageListPanelFx extends VBox implements IMessageListView {
                 super.updateItem(msg, empty);
                 if (empty || msg == null) {
                     setText(null);
+                    setContextMenu(null);
                 } else {
                     String dateStr = mDateFormat.format(new Date(msg.getEmissionDate()));
                     setText(String.format("[%s] %s: %s", dateStr, msg.getSender().getName(), msg.getText()));
+
+                    // Menu contextuel si l'utilisateur est l'auteur du message
+                    main.java.com.ubo.tp.message.datamodel.User currentUser = mController.getConnectedUser();
+                    if (currentUser != null && msg.getSender().getUuid().equals(currentUser.getUuid())) {
+                        javafx.scene.control.ContextMenu contextMenu = new javafx.scene.control.ContextMenu();
+                        javafx.scene.control.MenuItem deleteItem = new javafx.scene.control.MenuItem(
+                                "Supprimer ce message");
+                        deleteItem.setOnAction(ev -> {
+                            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                                    javafx.scene.control.Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Confirmation");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Voulez-vous supprimer ce message ?");
+                            alert.showAndWait().ifPresent(res -> {
+                                if (res == javafx.scene.control.ButtonType.OK) {
+                                    mController.deleteMessage(msg);
+                                }
+                            });
+                        });
+                        contextMenu.getItems().add(deleteItem);
+                        setContextMenu(contextMenu);
+                    } else {
+                        setContextMenu(null);
+                    }
                 }
             }
         });
