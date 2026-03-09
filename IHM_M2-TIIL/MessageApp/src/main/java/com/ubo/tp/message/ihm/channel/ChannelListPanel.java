@@ -265,6 +265,13 @@ public class ChannelListPanel extends JPanel implements IChannelListView {
                 if (c.isPrivate()) {
                     text += " (Privé)";
                 }
+                if (mController.hasUnreadMessages(c)) {
+                    text = "* " + text;
+                    setFont(getFont().deriveFont(java.awt.Font.BOLD));
+                    setForeground(new java.awt.Color(0, 120, 215));
+                } else {
+                    setFont(getFont().deriveFont(java.awt.Font.PLAIN));
+                }
                 setText(text);
             }
             return this;

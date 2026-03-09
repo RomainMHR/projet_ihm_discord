@@ -54,6 +54,12 @@ public class ChannelListPanelFx extends BorderPane implements IChannelListView {
                     if (item.isPrivate()) {
                         text += " (Privé)";
                     }
+                    if (mController.hasUnreadMessages(item)) {
+                        text = "* " + text;
+                        setStyle("-fx-font-weight: bold; -fx-text-fill: #0078D7;");
+                    } else {
+                        setStyle("");
+                    }
                     setText(text);
 
                     // Menu contextuel

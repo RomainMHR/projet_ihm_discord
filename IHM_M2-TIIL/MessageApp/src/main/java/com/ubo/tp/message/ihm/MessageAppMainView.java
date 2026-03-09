@@ -225,6 +225,7 @@ public class MessageAppMainView {
                     if (selected != null) {
                         messageView.getController().setCurrentRecipient(selected.getUuid(), selected.getName());
                         userController.setCurrentChannelFilter(selected);
+                        channelController.markChannelAsRead(selected.getUuid());
                     } else {
                         userController.setCurrentChannelFilter(null);
                     }

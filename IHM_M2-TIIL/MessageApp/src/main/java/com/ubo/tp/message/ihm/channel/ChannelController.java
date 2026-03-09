@@ -1,5 +1,9 @@
 package main.java.com.ubo.tp.message.ihm.channel;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.database.IDatabaseObserver;
 import main.java.com.ubo.tp.message.core.session.ISession;
@@ -18,6 +22,16 @@ public class ChannelController implements IDatabaseObserver {
     protected ISession mSession;
     protected IMessageApp mMessageApp;
     protected IChannelListView mView;
+
+    /**
+     * Ensemble des UUIDs de canaux ayant des messages non lus.
+     */
+    protected Set<UUID> mUnreadChannels = new HashSet<>();
+
+    /**
+     * UUID du canal actuellement sélectionné (pour ne pas marquer comme non lu).
+     */
+    protected UUID mCurrentSelectedChannelUuid;
 
     public ChannelController(IMessageApp messageApp, DataManager dataManager, ISession session) {
         this.mMessageApp = messageApp;
@@ -39,6 +53,24 @@ public class ChannelController implements IDatabaseObserver {
 
     public java.util.Set<User> getAllUsers() {
         return mDataManager.getUsers();
+    }
+
+    /**
+     * Marque un canal comme lu.
+     */
+    public void markChannelAsRead(UUID channelUuid) {
+        this.mCurrentSelectedChannelUuid = channelUuid;
+        if (channelUuid != null) {
+            this.mUnreadChannels.remove(channelUuid);
+            this.refreshView();
+        }
+    }
+
+    /**
+     * Retourne true si le canal a des messages non lus.
+     */
+    public boolean hasUnreadMessages(Channel channel) {
+        return channel != null && mUnreadChannels.contains(channel.getUuid());
     }
 
     protected String mSearchFilter = "";
@@ -179,7 +211,20 @@ public class ChannelController implements IDatabaseObserver {
 
     @Override
     public void notifyMessageAdded(Message message) {
-        // Pas d'action pour l'instant
+        if (message != null) {
+            UUID recipientUuid = message.getRecipient();
+            // Si le message est destiné à un canal qui n'est pas le canal sélectionné
+            if (mCurrentSelectedChannelUuid == null || !recipientUuid.equals(mCurrentSelectedChannelUuid)) {
+                // Vérifier que le recipient est bien un canal connu
+                for (Channel c : mDataManager.getChannels()) {
+                    if (c.getUuid().equals(recipientUuid)) {
+                        mUnreadChannels.add(recipientUuid);
+                        this.refreshView();
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     @Override

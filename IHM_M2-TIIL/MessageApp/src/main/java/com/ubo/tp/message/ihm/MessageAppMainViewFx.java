@@ -121,6 +121,7 @@ public class MessageAppMainViewFx extends BorderPane {
             if (channel != null) {
                 messageView.getController().setCurrentRecipient(channel.getUuid(), channel.getName());
                 userController.setCurrentChannelFilter(channel);
+                channelController.markChannelAsRead(channel.getUuid());
             } else {
                 userController.setCurrentChannelFilter(null);
             }

@@ -22,7 +22,7 @@
 - [x] **SRS-MAP-CHN-006** : L'utilisateur connecté peut supprimer un canal privé dont il est le propriétaire.
 - [x] **SRS-MAP-CHN-007** : L'utilisateur connecté peut ajouter un utilisateur à un canal privé dont il est le propriétaire.
 - [x] **SRS-MAP-CHN-087** : L'utilisateur connecté peut supprimer un utilisateur d'un canal privé dont il est le propriétaire.
-- [ ] **SRS-MAP-CHN-009** : La présence d'un nouveau message dans un canal est signalée par un indicateur graphique.
+- [x] **SRS-MAP-CHN-009** : La présence d'un nouveau message dans un canal est signalée par un indicateur graphique.
 - [ ] **SRS-MAP-CHN-010** : La présence en ligne d'un utilisateur est signalée par un indicateur graphique.
 
 ## Gestion des Messages
