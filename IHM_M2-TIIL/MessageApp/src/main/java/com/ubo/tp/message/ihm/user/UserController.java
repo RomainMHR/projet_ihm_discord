@@ -54,6 +54,12 @@ public class UserController implements IDatabaseObserver {
 
             if (mCurrentChannelFilter != null && mCurrentChannelFilter.isPrivate()) {
                 users.addAll(mCurrentChannelFilter.getUsers());
+            } else if (mCurrentChannelFilter != null) {
+                for (User user : mDataManager.getUsers()) {
+                    if (!user.getUuid().equals(Constants.UNKNONWN_USER_UUID)) {
+                        users.add(user);
+                    }
+                }
             } else {
                 for (User user : mDataManager.getUsers()) {
                     if (!user.getUuid().equals(Constants.UNKNONWN_USER_UUID)) {

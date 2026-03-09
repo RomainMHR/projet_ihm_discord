@@ -26,6 +26,11 @@ public class ChannelListPanel extends JPanel implements IChannelListView {
     protected JList<Channel> mChannelList;
     protected DefaultListModel<Channel> mListModel;
     protected JButton mCreateButton;
+    private boolean mIsUpdating = false;
+
+    public boolean isUpdating() {
+        return mIsUpdating;
+    }
 
     public ChannelListPanel(ChannelController controller) {
         this.mController = controller;
@@ -237,10 +242,21 @@ public class ChannelListPanel extends JPanel implements IChannelListView {
 
     @Override
     public void updateChannelList(Set<Channel> channels) {
+        mIsUpdating = true;
+        Channel selected = mChannelList.getSelectedValue();
         mListModel.clear();
         for (Channel channel : channels) {
             mListModel.addElement(channel);
         }
+        if (selected != null) {
+            for (Channel c : channels) {
+                if (c.getUuid().equals(selected.getUuid())) {
+                    mChannelList.setSelectedValue(c, true);
+                    break;
+                }
+            }
+        }
+        mIsUpdating = false;
     }
 
     public void addSelectionListener(javax.swing.event.ListSelectionListener listener) {

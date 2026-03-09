@@ -38,6 +38,8 @@ public class LoginController {
 
         if (foundUser != null && foundUser.getUserPassword().equals(password)) {
             // SRS-MAP-USR-004 : Connexion
+            foundUser.setOnline(true);
+            mDataManager.sendUser(foundUser);
             mSession.connect(foundUser);
             mMessageApp.showInformationMessage("Connexion réussie ! Bienvenue " + foundUser.getName());
             mMessageApp.notifyLogin(foundUser);

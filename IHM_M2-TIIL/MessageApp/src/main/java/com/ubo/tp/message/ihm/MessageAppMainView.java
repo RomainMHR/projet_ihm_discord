@@ -79,6 +79,11 @@ public class MessageAppMainView {
         mExitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                main.java.com.ubo.tp.message.datamodel.User u = mSession.getConnectedUser();
+                if (u != null) {
+                    u.setOnline(false);
+                    mDataManager.sendUser(u);
+                }
                 System.exit(0);
             }
         });
@@ -100,6 +105,11 @@ public class MessageAppMainView {
         mLogoutItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                main.java.com.ubo.tp.message.datamodel.User u = mSession.getConnectedUser();
+                if (u != null) {
+                    u.setOnline(false);
+                    mDataManager.sendUser(u);
+                }
                 mSession.disconnect();
             }
         });
@@ -220,7 +230,7 @@ public class MessageAppMainView {
         channelListPanel.addSelectionListener(new javax.swing.event.ListSelectionListener() {
             @Override
             public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
+                if (!e.getValueIsAdjusting() && !channelListPanel.isUpdating()) {
                     main.java.com.ubo.tp.message.datamodel.Channel selected = channelListPanel.getSelectedChannel();
                     if (selected != null) {
                         messageView.getController().setCurrentRecipient(selected.getUuid(), selected.getName());

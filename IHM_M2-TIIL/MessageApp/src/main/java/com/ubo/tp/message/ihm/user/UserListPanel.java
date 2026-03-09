@@ -100,8 +100,9 @@ public class UserListPanel extends JPanel implements IUserListView {
                 boolean isSelected, boolean cellHasFocus) {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value instanceof User) {
-                User user = (User) value;
-                setText(user.getName() + " (@" + user.getUserTag() + ")");
+                User u = (User) value;
+                String status = u.isOnline() ? "🟢 " : "⚪ ";
+                setText(status + u.getName() + " (@" + u.getUserTag() + ")");
             }
             return this;
         }

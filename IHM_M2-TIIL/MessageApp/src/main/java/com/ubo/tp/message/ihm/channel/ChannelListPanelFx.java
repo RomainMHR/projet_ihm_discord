@@ -20,6 +20,7 @@ public class ChannelListPanelFx extends BorderPane implements IChannelListView {
     protected ChannelController mController;
     protected ListView<Channel> mChannelList;
     private Consumer<Channel> onChannelSelected;
+    private boolean mIsUpdating = false;
 
     public ChannelListPanelFx(ChannelController controller) {
         this.mController = controller;
@@ -168,6 +169,8 @@ public class ChannelListPanelFx extends BorderPane implements IChannelListView {
         });
 
         mChannelList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (mIsUpdating)
+                return;
             if (onChannelSelected != null) {
                 onChannelSelected.accept(newVal);
             }
@@ -268,8 +271,19 @@ public class ChannelListPanelFx extends BorderPane implements IChannelListView {
     @Override
     public void updateChannelList(Set<Channel> channels) {
         Platform.runLater(() -> {
+            mIsUpdating = true;
+            Channel selected = mChannelList.getSelectionModel().getSelectedItem();
             mChannelList.getItems().clear();
             mChannelList.getItems().addAll(channels);
+            if (selected != null) {
+                for (Channel c : channels) {
+                    if (c.getUuid().equals(selected.getUuid())) {
+                        mChannelList.getSelectionModel().select(c);
+                        break;
+                    }
+                }
+            }
+            mIsUpdating = false;
         });
     }
 

@@ -44,7 +44,8 @@ public class UserListPanelFx extends BorderPane implements IUserListView {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getName() + " (@" + item.getUserTag() + ")");
+                    String status = item.isOnline() ? "🟢 " : "⚪ ";
+                    setText(status + item.getName() + " (@" + item.getUserTag() + ")");
                 }
             }
         });

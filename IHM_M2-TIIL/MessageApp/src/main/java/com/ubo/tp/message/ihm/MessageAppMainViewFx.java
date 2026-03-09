@@ -36,7 +36,14 @@ public class MessageAppMainViewFx extends BorderPane {
         MenuBar menuBar = new MenuBar();
         Menu fileMenu = new Menu("Fichier");
         MenuItem exitItem = new MenuItem("Quitter JavaFX");
-        exitItem.setOnAction(e -> System.exit(0));
+        exitItem.setOnAction(e -> {
+            main.java.com.ubo.tp.message.datamodel.User u = mSession.getConnectedUser();
+            if (u != null) {
+                u.setOnline(false);
+                mDataManager.sendUser(u);
+            }
+            System.exit(0);
+        });
         fileMenu.getItems().add(exitItem);
 
         Menu helpMenu = new Menu("?");
@@ -99,7 +106,14 @@ public class MessageAppMainViewFx extends BorderPane {
 
         Menu logoutMenu = new Menu("Déconnexion");
         MenuItem logoutItem = new MenuItem("Se déconnecter");
-        logoutItem.setOnAction(e -> mSession.disconnect());
+        logoutItem.setOnAction(e -> {
+            main.java.com.ubo.tp.message.datamodel.User u = mSession.getConnectedUser();
+            if (u != null) {
+                u.setOnline(false);
+                mDataManager.sendUser(u);
+            }
+            mSession.disconnect();
+        });
         logoutMenu.getItems().add(logoutItem);
 
         menuBar.getMenus().addAll(fileMenu, helpMenu, profileMenu, logoutMenu);
