@@ -2,7 +2,6 @@ package main.java.com.ubo.tp.message.ihm.message;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -74,6 +73,16 @@ public class MessageController implements IDatabaseObserver {
         }
     }
 
+    /**
+     * Filtre de recherche courant (texte libre).
+     */
+    protected String mSearchFilter = "";
+
+    public void setSearchFilter(String filter) {
+        this.mSearchFilter = (filter == null) ? "" : filter.trim().toLowerCase();
+        this.refreshListView();
+    }
+
     protected void refreshListView() {
         if (mListView == null) {
             return;
@@ -86,32 +95,26 @@ public class MessageController implements IDatabaseObserver {
         List<Message> conversationMessages = new ArrayList<>();
         Set<Message> allMessages = mDataManager.getMessages();
 
-        // On peut afficher tous les messages envoyés vers le recipient actuel.
-        // On récupère aussi les messages qu'on a envoyé au recipient (si c'est un
-        // User).
         for (Message msg : allMessages) {
             boolean isToRecipient = msg.getRecipient().equals(mCurrentRecipientUuid);
             boolean isFromRecipientToUs = false;
 
-            // Si c'est un chat 1-to-1, il faut aussi afficher les messages que l'autre nous
-            // a envoyé
             if (mSession.getConnectedUser() != null) {
                 isFromRecipientToUs = msg.getSender().getUuid().equals(mCurrentRecipientUuid)
                         && msg.getRecipient().equals(mSession.getConnectedUser().getUuid());
             }
 
             if (isToRecipient || isFromRecipientToUs) {
-                conversationMessages.add(msg);
+                // Appliquer le filtre de recherche
+                if (mSearchFilter.isEmpty() || msg.getText().toLowerCase().contains(mSearchFilter)
+                        || msg.getSender().getName().toLowerCase().contains(mSearchFilter)) {
+                    conversationMessages.add(msg);
+                }
             }
         }
 
         // Tri chronologique
-        Collections.sort(conversationMessages, new Comparator<Message>() {
-            @Override
-            public int compare(Message m1, Message m2) {
-                return Long.compare(m1.getEmissionDate(), m2.getEmissionDate());
-            }
-        });
+        Collections.sort(conversationMessages, (m1, m2) -> Long.compare(m1.getEmissionDate(), m2.getEmissionDate()));
 
         mListView.updateMessageList(conversationMessages);
     }

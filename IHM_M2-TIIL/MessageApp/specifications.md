@@ -8,14 +8,14 @@
 - [x] **SRS-MAP-USR-004** : L'utilisateur peut se connecter sur un compte préalablement enregistré.
 - [x] **SRS-MAP-USR-005** : L'utilisateur connecté peut se déconnecter de l'application.
 - [x] **SRS-MAP-USR-007** : L'utilisateur connecté peut consulter la liste des utilisateurs enregistrés.
-- [ ] **SRS-MAP-USR-008** : L'utilisateur connecté peut rechercher un utilisateur enregistré.
+- [x] **SRS-MAP-USR-008** : L'utilisateur connecté peut rechercher un utilisateur enregistré.
 - [x] **SRS-MAP-USR-009** : L'utilisateur connecté peut modifier son nom d'utilisateur.
 - [x] **SRS-MAP-USR-010** : L'utilisateur connecté peut supprimer son compte.
 
 ## Gestion des Canaux
 
 - [x] **SRS-MAP-CHN-001** : L'utilisateur connecté peut consulter la liste des canaux enregistrés.
-- [ ] **SRS-MAP-CHN-002** : L'utilisateur connecté peut rechercher un canal.
+- [x] **SRS-MAP-CHN-002** : L'utilisateur connecté peut rechercher un canal.
 - [x] **SRS-MAP-CHN-003** : L'utilisateur connecté peut créer un canal public.
 - [x] **SRS-MAP-CHN-004** : L'utilisateur connecté peut créer un canal privé.
 - [x] **SRS-MAP-CHN-005** : L'utilisateur connecté peut quitter un canal privé dont il n'est pas le propriétaire.
@@ -31,7 +31,7 @@
 - [x] **SRS-MAP-MSG-002** : L'utilisateur connecté peut envoyer un message dans un canal public.
 - [x] **SRS-MAP-MSG-003** : L'utilisateur connecté peut consulter les messages d'un canal privé dont il est membre.
 - [x] **SRS-MAP-MSG-004** : L'utilisateur connecté peut envoyer un message dans un canal privé dont il est membre.
-- [ ] **SRS-MAP-MSG-005** : L'utilisateur connecté peut rechercher un message dans un canal.
+- [x] **SRS-MAP-MSG-005** : L'utilisateur connecté peut rechercher un message dans un canal.
 - [x] **SRS-MAP-MSG-006** : L'utilisateur connecté peut supprimer un message dont il est l'auteur.
 - [ ] **SRS-MAP-MSG-007** : L'utilisateur connecté peut envoyer un message privé à un utilisateur.
 - [x] **SRS-MAP-MSG-008** : Le texte d'un message ne dépasse pas 200 caractères.

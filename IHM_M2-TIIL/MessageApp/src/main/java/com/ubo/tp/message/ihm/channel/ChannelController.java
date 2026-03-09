@@ -41,6 +41,13 @@ public class ChannelController implements IDatabaseObserver {
         return mDataManager.getUsers();
     }
 
+    protected String mSearchFilter = "";
+
+    public void setSearchFilter(String filter) {
+        this.mSearchFilter = (filter == null) ? "" : filter.trim().toLowerCase();
+        this.refreshView();
+    }
+
     protected void refreshView() {
         if (mView != null) {
             java.util.Set<Channel> allChannels = mDataManager.getChannels();
@@ -48,9 +55,20 @@ public class ChannelController implements IDatabaseObserver {
             User currentUser = mSession.getConnectedUser();
 
             for (Channel c : allChannels) {
+                // Filtre de visibilité (privé/public)
+                boolean visible = false;
                 if (!c.isPrivate()) {
-                    visibleChannels.add(c);
+                    visible = true;
                 } else if (currentUser != null && c.getUsers().contains(currentUser)) {
+                    visible = true;
+                }
+
+                // Filtre de recherche
+                if (visible && !mSearchFilter.isEmpty()) {
+                    visible = c.getName().toLowerCase().contains(mSearchFilter);
+                }
+
+                if (visible) {
                     visibleChannels.add(c);
                 }
             }

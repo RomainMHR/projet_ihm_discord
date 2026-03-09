@@ -41,21 +41,39 @@ public class UserController implements IDatabaseObserver {
         this.refreshView();
     }
 
+    protected String mSearchFilter = "";
+
+    public void setSearchFilter(String filter) {
+        this.mSearchFilter = (filter == null) ? "" : filter.trim().toLowerCase();
+        this.refreshView();
+    }
+
     protected void refreshView() {
         if (mView != null) {
             Set<User> users = new HashSet<>();
 
             if (mCurrentChannelFilter != null && mCurrentChannelFilter.isPrivate()) {
-                // Obtenir les membres du canal privé uniquement
                 users.addAll(mCurrentChannelFilter.getUsers());
             } else {
-                // Si canal public ou pas de canal, tous les utilisateurs
                 for (User user : mDataManager.getUsers()) {
                     if (!user.getUuid().equals(Constants.UNKNONWN_USER_UUID)) {
                         users.add(user);
                     }
                 }
             }
+
+            // Appliquer le filtre de recherche
+            if (!mSearchFilter.isEmpty()) {
+                Set<User> filtered = new HashSet<>();
+                for (User u : users) {
+                    if (u.getName().toLowerCase().contains(mSearchFilter)
+                            || u.getUserTag().toLowerCase().contains(mSearchFilter)) {
+                        filtered.add(u);
+                    }
+                }
+                users = filtered;
+            }
+
             mView.updateUserList(users);
         }
     }

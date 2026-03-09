@@ -27,7 +27,14 @@ public class UserListPanelFx extends BorderPane implements IUserListView {
 
         Label titleLabel = new Label("Utilisateurs (JavaFX)");
         titleLabel.setStyle("-fx-font-weight: bold; -fx-padding: 10px;");
-        this.setTop(titleLabel);
+
+        javafx.scene.control.TextField searchField = new javafx.scene.control.TextField();
+        searchField.setPromptText("Rechercher un utilisateur...");
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> mController.setSearchFilter(newVal));
+
+        javafx.scene.layout.VBox topBox = new javafx.scene.layout.VBox(2, titleLabel, searchField);
+        topBox.setPadding(new javafx.geometry.Insets(5));
+        this.setTop(topBox);
 
         mUserList = new ListView<>();
         mUserList.setCellFactory(param -> new ListCell<User>() {

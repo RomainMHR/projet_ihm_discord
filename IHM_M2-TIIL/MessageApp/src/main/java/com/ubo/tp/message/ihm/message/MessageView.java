@@ -29,10 +29,37 @@ public class MessageView extends JPanel implements IMessageMainView {
         this.mTitleLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
         this.mTitleLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Barre de recherche
+        javax.swing.JTextField searchField = new javax.swing.JTextField();
+        searchField.setToolTipText("Rechercher un message...");
+        searchField.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createEmptyBorder(0, 10, 5, 10),
+                javax.swing.BorderFactory.createTitledBorder("🔍 Rechercher")));
+        searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                mController.setSearchFilter(searchField.getText());
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                mController.setSearchFilter(searchField.getText());
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                mController.setSearchFilter(searchField.getText());
+            }
+        });
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(mTitleLabel, BorderLayout.NORTH);
+        topPanel.add(searchField, BorderLayout.SOUTH);
+
         this.mListPanel = new MessageListPanel(mController);
         this.mInputPanel = new MessageInputPanel(mController);
 
-        this.add(mTitleLabel, BorderLayout.NORTH);
+        this.add(topPanel, BorderLayout.NORTH);
         this.add(mListPanel, BorderLayout.CENTER);
         this.add(mInputPanel, BorderLayout.SOUTH);
     }

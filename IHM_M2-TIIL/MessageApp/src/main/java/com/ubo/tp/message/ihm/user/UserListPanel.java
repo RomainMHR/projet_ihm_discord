@@ -37,7 +37,33 @@ public class UserListPanel extends JPanel implements IUserListView {
         // Titre
         JLabel titleLabel = new JLabel("Utilisateurs");
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        this.add(titleLabel, BorderLayout.NORTH);
+
+        // Barre de recherche
+        javax.swing.JTextField searchField = new javax.swing.JTextField();
+        searchField.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createEmptyBorder(2, 5, 2, 5),
+                javax.swing.BorderFactory.createTitledBorder("🔍 Rechercher")));
+        searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                mController.setSearchFilter(searchField.getText());
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                mController.setSearchFilter(searchField.getText());
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                mController.setSearchFilter(searchField.getText());
+            }
+        });
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(titleLabel, BorderLayout.NORTH);
+        topPanel.add(searchField, BorderLayout.SOUTH);
+        this.add(topPanel, BorderLayout.NORTH);
 
         // Liste des utilisateurs
         mListModel = new DefaultListModel<>();

@@ -32,7 +32,14 @@ public class ChannelListPanelFx extends BorderPane implements IChannelListView {
 
         Label titleLabel = new Label("Canaux (JavaFX)");
         titleLabel.setStyle("-fx-font-weight: bold; -fx-padding: 10px;");
-        this.setTop(titleLabel);
+
+        javafx.scene.control.TextField searchField = new javafx.scene.control.TextField();
+        searchField.setPromptText("Rechercher un canal...");
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> mController.setSearchFilter(newVal));
+
+        VBox topBox = new VBox(2, titleLabel, searchField);
+        topBox.setPadding(new Insets(5));
+        this.setTop(topBox);
 
         mChannelList = new ListView<>();
         mChannelList.setCellFactory(param -> new ListCell<Channel>() {

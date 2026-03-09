@@ -25,7 +25,14 @@ public class MessageViewFx extends BorderPane implements IMessageMainView {
         this.mTitleLabel = new Label("Sélectionnez une conversation");
         this.mTitleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        VBox topBox = new VBox(this.mTitleLabel);
+        // Barre de recherche
+        javafx.scene.control.TextField searchField = new javafx.scene.control.TextField();
+        searchField.setPromptText("🔍 Rechercher un message...");
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            mController.setSearchFilter(newVal);
+        });
+
+        VBox topBox = new VBox(5, this.mTitleLabel, searchField);
         topBox.setAlignment(Pos.CENTER);
         topBox.setPadding(new Insets(10));
         this.setTop(topBox);
