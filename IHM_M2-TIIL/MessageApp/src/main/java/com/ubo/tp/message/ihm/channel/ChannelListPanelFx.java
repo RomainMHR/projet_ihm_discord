@@ -30,6 +30,7 @@ public class ChannelListPanelFx extends BorderPane implements IChannelListView {
 
     protected void initGUI() {
         this.setMinWidth(200);
+        this.setPadding(new Insets(10));
 
         Label titleLabel = new Label("Canaux (JavaFX)");
         titleLabel.setStyle("-fx-font-weight: bold; -fx-padding: 10px;");

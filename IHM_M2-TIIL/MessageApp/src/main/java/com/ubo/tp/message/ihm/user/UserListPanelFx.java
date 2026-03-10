@@ -26,6 +26,7 @@ public class UserListPanelFx extends BorderPane implements IUserListView {
 
     protected void initGUI() {
         this.setMinWidth(200);
+        this.setPadding(new javafx.geometry.Insets(10));
 
         Label titleLabel = new Label("Utilisateurs (JavaFX)");
         titleLabel.setStyle("-fx-font-weight: bold; -fx-padding: 10px;");

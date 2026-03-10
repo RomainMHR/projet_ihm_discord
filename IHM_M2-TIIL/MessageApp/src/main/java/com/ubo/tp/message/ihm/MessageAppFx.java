@@ -58,6 +58,9 @@ public class MessageAppFx extends Application implements ISessionObserver, IMess
         LoginController controller = new LoginController(this, mDataManager, mSession);
         LoginViewFx loginView = new LoginViewFx(controller);
         Scene scene = new Scene(loginView, 400, 300);
+        scene.getStylesheets().add(new java.io.File(
+                "c:/Users/romai/Documents/GitHub/projet_ihm_discord/IHM_M2-TIIL/MessageApp/style.css").toURI()
+                .toString());
         this.mStage.setScene(scene);
         this.mStage.setTitle("MessageApp JavaFX - Connexion");
     }
@@ -67,6 +70,9 @@ public class MessageAppFx extends Application implements ISessionObserver, IMess
         RegisterController controller = new RegisterController(this, mDataManager);
         RegisterViewFx registerView = new RegisterViewFx(controller);
         Scene scene = new Scene(registerView, 400, 400);
+        scene.getStylesheets().add(new java.io.File(
+                "c:/Users/romai/Documents/GitHub/projet_ihm_discord/IHM_M2-TIIL/MessageApp/style.css").toURI()
+                .toString());
         this.mStage.setScene(scene);
         this.mStage.setTitle("MessageApp JavaFX - Inscription");
     }
@@ -75,6 +81,9 @@ public class MessageAppFx extends Application implements ISessionObserver, IMess
     public void showMainView() {
         MessageAppMainViewFx mainView = new MessageAppMainViewFx(this, mSession, mDataManager);
         Scene scene = new Scene(mainView, 800, 600);
+        scene.getStylesheets().add(new java.io.File(
+                "c:/Users/romai/Documents/GitHub/projet_ihm_discord/IHM_M2-TIIL/MessageApp/style.css").toURI()
+                .toString());
         this.mStage.setScene(scene);
         this.mStage.setTitle("MessageApp JavaFX - " + mSession.getConnectedUser().getName());
     }

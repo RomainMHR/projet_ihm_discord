@@ -42,6 +42,8 @@ public class MessageViewFx extends BorderPane implements IMessageMainView {
 
         this.setCenter(this.mListPanel);
         this.setBottom(this.mInputPanel);
+
+        this.setPadding(new javafx.geometry.Insets(10));
     }
 
     public MessageController getController() {

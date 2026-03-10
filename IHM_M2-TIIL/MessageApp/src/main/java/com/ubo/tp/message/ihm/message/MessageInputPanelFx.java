@@ -30,6 +30,7 @@ public class MessageInputPanelFx extends HBox implements IMessageInputView {
 
         mSendButton = new Button("Envoyer");
         mSendButton.setOnAction(e -> sendMessage());
+        mSendButton.setMinWidth(Button.USE_PREF_SIZE);
 
         this.getChildren().addAll(mInputField, mSendButton);
     }
