@@ -36,4 +36,4 @@
 - [x] **SRS-MAP-MSG-007** : L'utilisateur connecté peut envoyer un message privé à un utilisateur.
 - [x] **SRS-MAP-MSG-008** : Le texte d'un message ne dépasse pas 200 caractères.
 - [x] **SRS-MAP-MSG-009** : Lors de la rédaction d'un message, l'utilisateur connecté peut mentionner un autre utilisateur du canal en utilisant le caractère '@'.
-- [ ] **SRS-MAP-MSG-010** : Une notification avertit l'utilisateur connecté lorsqu'un utilisateur lui envoie un message direct ou lorsqu'il est mentionné dans un canal.
+- [x] **SRS-MAP-MSG-010** : Une notification avertit l'utilisateur connecté lorsqu'un utilisateur lui envoie un message direct ou lorsqu'il est mentionné dans un canal.

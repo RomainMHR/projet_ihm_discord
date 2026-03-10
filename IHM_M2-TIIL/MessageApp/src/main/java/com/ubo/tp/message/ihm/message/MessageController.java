@@ -35,10 +35,16 @@ public class MessageController implements IDatabaseObserver {
      */
     protected UUID mCurrentRecipientUuid;
 
+    /**
+     * Timestamp de démarrage du contrôleur (pour ignorer les messages existants).
+     */
+    protected long mStartTimestamp;
+
     public MessageController(IMessageApp messageApp, DataManager dataManager, ISession session) {
         this.mMessageApp = messageApp;
         this.mDataManager = dataManager;
         this.mSession = session;
+        this.mStartTimestamp = System.currentTimeMillis();
         this.mDataManager.addObserver(this);
     }
 
@@ -168,6 +174,56 @@ public class MessageController implements IDatabaseObserver {
     @Override
     public void notifyMessageAdded(Message message) {
         this.refreshListView();
+
+        // Vérifier si une notification doit être affichée
+        if (message == null) {
+            return;
+        }
+
+        // Ignorer les anciens messages chargés au démarrage de l'application
+        if (message.getEmissionDate() < mStartTimestamp) {
+            return;
+        }
+        User currentUser = mSession.getConnectedUser();
+        if (currentUser == null) {
+            return;
+        }
+        // Ne pas notifier pour ses propres messages
+        if (message.getSender().getUuid().equals(currentUser.getUuid())) {
+            return;
+        }
+
+        String senderName = message.getSender().getName();
+
+        // Cas 1 : Message direct (le message est dans un canal DM dont l'utilisateur
+        // est membre)
+        for (Channel c : mDataManager.getChannels()) {
+            if (c.isDirectMessage() && c.getUuid().equals(message.getRecipient())
+                    && c.getUsers().contains(currentUser)) {
+                mMessageApp.showInformationMessage(
+                        "💬 Nouveau message privé de " + senderName + " : " + truncate(message.getText(), 50));
+                return;
+            }
+        }
+
+        // Cas 2 : Mention dans un canal
+        String myName = currentUser.getName().toLowerCase();
+        String myTag = currentUser.getUserTag().toLowerCase();
+        String msgText = message.getText().toLowerCase();
+        if (msgText.contains("@" + myName) || msgText.contains("@" + myTag)) {
+            mMessageApp.showInformationMessage(
+                    "🔔 " + senderName + " vous a mentionné : " + truncate(message.getText(), 50));
+        }
+    }
+
+    /**
+     * Tronque un texte à la longueur maximale donnée.
+     */
+    protected String truncate(String text, int maxLength) {
+        if (text.length() <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + "...";
     }
 
     @Override
