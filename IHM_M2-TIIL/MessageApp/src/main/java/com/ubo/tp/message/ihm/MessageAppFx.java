@@ -117,11 +117,52 @@ public class MessageAppFx extends Application implements ISessionObserver, IMess
     @Override
     public void showInformationMessage(String message) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.showAndWait();
+            javafx.stage.Stage toastStage = new javafx.stage.Stage();
+            toastStage.initOwner(this.mStage);
+            toastStage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
+            toastStage.setAlwaysOnTop(true);
+
+            javafx.scene.text.Text text = new javafx.scene.text.Text(message);
+            text.setFill(javafx.scene.paint.Color.WHITE);
+            text.setFont(javafx.scene.text.Font.font("Arial", javafx.scene.text.FontWeight.BOLD, 14));
+
+            javafx.scene.layout.StackPane root = new javafx.scene.layout.StackPane(text);
+            root.setStyle("-fx-background-radius: 10; -fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 15px;");
+            root.setOpacity(0);
+
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            toastStage.setScene(scene);
+
+            // Positionnement en bas au centre
+            toastStage.setOnShown(event -> {
+                double x = this.mStage.getX() + this.mStage.getWidth() / 2 - toastStage.getWidth() / 2;
+                double y = this.mStage.getY() + this.mStage.getHeight() - toastStage.getHeight() - 50;
+                toastStage.setX(x);
+                toastStage.setY(y);
+            });
+
+            toastStage.show();
+
+            // Animation d'apparition
+            javafx.animation.FadeTransition fadeIn = new javafx.animation.FadeTransition(
+                    javafx.util.Duration.millis(300), root);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+            fadeIn.play();
+
+            // Fermeture automatique après 3 secondes
+            javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(
+                    javafx.util.Duration.seconds(3));
+            delay.setOnFinished(e -> {
+                javafx.animation.FadeTransition fadeOut = new javafx.animation.FadeTransition(
+                        javafx.util.Duration.millis(300), root);
+                fadeOut.setFromValue(1);
+                fadeOut.setToValue(0);
+                fadeOut.setOnFinished(event -> toastStage.close());
+                fadeOut.play();
+            });
+            delay.play();
         });
     }
 }
