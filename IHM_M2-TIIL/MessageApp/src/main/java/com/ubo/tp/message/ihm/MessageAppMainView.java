@@ -223,6 +223,23 @@ public class MessageAppMainView {
                 userController);
         mFrame.add(userListPanel, BorderLayout.EAST);
 
+        // Ajout de l'observation de session pour le nettoyage (empêche les Zombie
+        // Listeners Swing)
+        mSession.addObserver(new main.java.com.ubo.tp.message.core.session.ISessionObserver() {
+            @Override
+            public void notifyLogin(main.java.com.ubo.tp.message.datamodel.User user) {
+            }
+
+            @Override
+            public void notifyLogout() {
+                // Nettoyage des contrôleurs existants de ce MainView
+                messageView.getController().dispose();
+                channelController.dispose();
+                userController.dispose();
+                mSession.removeObserver(this);
+            }
+        });
+
         // Au centre : les messages
         this.setMainPanel(messageView);
 

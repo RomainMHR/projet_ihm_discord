@@ -128,6 +128,23 @@ public class MessageAppMainViewFx extends BorderPane {
         UserController userController = new UserController(mDataManager, mSession);
         UserListPanelFx userListPanel = new UserListPanelFx(userController);
 
+        // Ajout de l'observation de session pour le nettoyage (empêche les Zombie
+        // Listeners JavaFX)
+        mSession.addObserver(new main.java.com.ubo.tp.message.core.session.ISessionObserver() {
+            @Override
+            public void notifyLogin(main.java.com.ubo.tp.message.datamodel.User user) {
+            }
+
+            @Override
+            public void notifyLogout() {
+                // Nettoyage des contrôleurs existants de ce MainView
+                messageView.getController().dispose();
+                channelController.dispose();
+                userController.dispose();
+                mSession.removeObserver(this);
+            }
+        });
+
         this.setLeft(channelListPanel);
         this.setRight(userListPanel);
         this.setCenter(messageView);

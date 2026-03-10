@@ -29,6 +29,13 @@ public class UserController implements IDatabaseObserver {
         this.mDataManager.addObserver(this);
     }
 
+    /**
+     * Nettoie le contrôleur en le désinscrivant du DataManager.
+     */
+    public void dispose() {
+        this.mDataManager.removeObserver(this);
+    }
+
     protected Channel mCurrentChannelFilter;
 
     public void setView(IUserListView view) {

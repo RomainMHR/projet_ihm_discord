@@ -38,8 +38,15 @@ public class ChannelController implements IDatabaseObserver {
         this.mDataManager = dataManager;
         this.mSession = session;
 
-        // On s'abonne aux changements de la base pour mettre à jour la liste
+        // On s'abonne aux changements de la base
         this.mDataManager.addObserver(this);
+    }
+
+    /**
+     * Nettoie le contrôleur en le désinscrivant du DataManager.
+     */
+    public void dispose() {
+        this.mDataManager.removeObserver(this);
     }
 
     public void setView(IChannelListView view) {

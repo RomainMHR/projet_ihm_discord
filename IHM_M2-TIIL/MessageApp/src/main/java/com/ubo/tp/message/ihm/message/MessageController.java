@@ -48,6 +48,13 @@ public class MessageController implements IDatabaseObserver {
         this.mDataManager.addObserver(this);
     }
 
+    /**
+     * Nettoie le contrôleur en le désinscrivant du DataManager.
+     */
+    public void dispose() {
+        this.mDataManager.removeObserver(this);
+    }
+
     public User getConnectedUser() {
         return mSession.getConnectedUser();
     }
