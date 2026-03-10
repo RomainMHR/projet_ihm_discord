@@ -95,9 +95,33 @@ public class MessageListPanel extends JPanel implements IMessageListView {
             if (value instanceof Message) {
                 Message msg = (Message) value;
                 String dateStr = mDateFormat.format(new Date(msg.getEmissionDate()));
-                setText(String.format("[%s] %s: %s", dateStr, msg.getSender().getName(), msg.getText()));
+                main.java.com.ubo.tp.message.datamodel.User currentUser = mController.getConnectedUser();
+                String styledText = styleMentions(msg.getText(), currentUser);
+                setText(String.format("<html>[%s] <b>%s</b>: %s</html>", dateStr, msg.getSender().getName(),
+                        styledText));
             }
             return this;
         }
+    }
+
+    /**
+     * Colore uniquement la @mention de l'utilisateur connecté.
+     */
+    protected String styleMentions(String text, main.java.com.ubo.tp.message.datamodel.User currentUser) {
+        if (currentUser == null) {
+            return text;
+        }
+        String userName = currentUser.getName().toLowerCase();
+        String userTag = currentUser.getUserTag().toLowerCase();
+        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("@(\\w+)").matcher(text);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String mention = matcher.group(1).toLowerCase();
+            if (mention.equals(userName) || mention.equals(userTag)) {
+                matcher.appendReplacement(sb, "<span style='color:#5865F2;font-weight:bold;'>@$1</span>");
+            }
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 }

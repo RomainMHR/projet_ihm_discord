@@ -35,13 +35,50 @@ public class MessageListPanelFx extends VBox implements IMessageListView {
                 super.updateItem(msg, empty);
                 if (empty || msg == null) {
                     setText(null);
+                    setGraphic(null);
                     setContextMenu(null);
                 } else {
                     String dateStr = mDateFormat.format(new Date(msg.getEmissionDate()));
-                    setText(String.format("[%s] %s: %s", dateStr, msg.getSender().getName(), msg.getText()));
+                    String prefix = String.format("[%s] %s: ", dateStr, msg.getSender().getName());
+
+                    // Créer un TextFlow avec les @mentions en bleu gras
+                    javafx.scene.text.TextFlow textFlow = new javafx.scene.text.TextFlow();
+                    javafx.scene.text.Text prefixText = new javafx.scene.text.Text(prefix);
+                    prefixText.setStyle("-fx-font-weight: bold;");
+                    textFlow.getChildren().add(prefixText);
+
+                    // Parser le texte pour trouver les @mentions
+                    String msgText = msg.getText();
+                    main.java.com.ubo.tp.message.datamodel.User currentUser = mController.getConnectedUser();
+                    String myName = (currentUser != null) ? currentUser.getName().toLowerCase() : "";
+                    String myTag = (currentUser != null) ? currentUser.getUserTag().toLowerCase() : "";
+
+                    java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("@(\\w+)").matcher(msgText);
+                    int lastEnd = 0;
+                    while (matcher.find()) {
+                        // Texte avant la mention
+                        if (matcher.start() > lastEnd) {
+                            textFlow.getChildren()
+                                    .add(new javafx.scene.text.Text(msgText.substring(lastEnd, matcher.start())));
+                        }
+                        // La mention : colorée uniquement si c'est l'utilisateur connecté
+                        javafx.scene.text.Text mentionText = new javafx.scene.text.Text(matcher.group());
+                        String mentionName = matcher.group(1).toLowerCase();
+                        if (mentionName.equals(myName) || mentionName.equals(myTag)) {
+                            mentionText.setStyle("-fx-fill: #5865F2; -fx-font-weight: bold;");
+                        }
+                        textFlow.getChildren().add(mentionText);
+                        lastEnd = matcher.end();
+                    }
+                    // Texte restant après la dernière mention
+                    if (lastEnd < msgText.length()) {
+                        textFlow.getChildren().add(new javafx.scene.text.Text(msgText.substring(lastEnd)));
+                    }
+
+                    setText(null);
+                    setGraphic(textFlow);
 
                     // Menu contextuel si l'utilisateur est l'auteur du message
-                    main.java.com.ubo.tp.message.datamodel.User currentUser = mController.getConnectedUser();
                     if (currentUser != null && msg.getSender().getUuid().equals(currentUser.getUuid())) {
                         javafx.scene.control.ContextMenu contextMenu = new javafx.scene.control.ContextMenu();
                         javafx.scene.control.MenuItem deleteItem = new javafx.scene.control.MenuItem(
