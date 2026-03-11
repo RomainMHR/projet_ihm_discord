@@ -97,8 +97,9 @@ public class MessageListPanel extends JPanel implements IMessageListView {
                 String dateStr = mDateFormat.format(new Date(msg.getEmissionDate()));
                 main.java.com.ubo.tp.message.datamodel.User currentUser = mController.getConnectedUser();
 
-                // Échapper le texte brut avant de styliser les mentions
-                String escapedText = escapeHTML(msg.getText());
+                // Remplacer les emojis puis échapper le texte
+                String textWithEmojis = main.java.com.ubo.tp.message.common.EmojiUtils.replaceEmojis(msg.getText());
+                String escapedText = escapeHTML(textWithEmojis);
                 String styledText = styleMentions(escapedText, currentUser);
 
                 // Utiliser un div avec word-wrap pour forcer le retour à la ligne

@@ -124,9 +124,7 @@ public class MessageAppMainView {
                         "Le mode turbo arrive bientôt !\n\nLes fonctionnalités suivantes seront disponibles dans les prochains patchs :\n"
                                 + "- Envoi d'images dans les messages\n"
                                 + "- Chat-bot dédié\n"
-                                + "- Réactions aux messages (❤️, 👍, etc.)\n"
-                                + "- Support complet des emojis\n"
-                                + "- Easter eggs interactifs (/party, /flip, /earthquake)",
+                                + "- Réactions aux messages (❤️, 👍, etc.)",
                         "Mode Turbo", JOptionPane.INFORMATION_MESSAGE);
             }
         });

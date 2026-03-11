@@ -52,9 +52,7 @@ public class MessageAppMainViewFx extends BorderPane {
             alert.setContentText("Les fonctionnalités suivantes seront disponibles dans les prochains patchs :\n\n"
                     + "- Envoi d'images dans les messages\n"
                     + "- Chat-bot dédié\n"
-                    + "- Réactions aux messages (❤️, 👍, etc.)\n"
-                    + "- Support complet des emojis\n"
-                    + "- Easter eggs interactifs (/party, /flip, /earthquake)");
+                    + "- Réactions aux messages (❤️, 👍, etc.)");
             alert.showAndWait();
         });
 

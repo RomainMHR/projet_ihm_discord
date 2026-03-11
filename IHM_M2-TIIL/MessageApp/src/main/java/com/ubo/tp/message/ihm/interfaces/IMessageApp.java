@@ -16,4 +16,6 @@ public interface IMessageApp {
     void showErrorMessage(String message);
 
     void showInformationMessage(String message);
+
+    void triggerEasterEgg(String eggType);
 }

@@ -1,6 +1,7 @@
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\MessageAppLauncher.java
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\common\Constants.java
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\common\DataFilesManager.java
+C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\common\EmojiUtils.java
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\common\PropertiesManager.java
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\core\DataManager.java
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\core\database\Database.java
@@ -51,3 +52,4 @@ C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\ma
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\ihm\user\UserController.java
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\ihm\user\UserListPanel.java
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\ihm\user\UserListPanelFx.java
+C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\mock\MessageAppMock.java
