@@ -93,6 +93,15 @@ public class DataManager {
 	}
 
 	/**
+	 * Supprime un Message.
+	 *
+	 * @param message
+	 */
+	public void deleteMessage(Message message) {
+		this.mEntityManager.deleteMessageFile(message);
+	}
+
+	/**
 	 * Ecrit un Utilisateur.
 	 *
 	 * @param user
@@ -119,6 +128,15 @@ public class DataManager {
 	public void sendChannel(Channel channel) {
 		// Ecrit un canal
 		this.mEntityManager.writeChannelFile(channel);
+	}
+
+	/**
+	 * Supprime un Canal.
+	 *
+	 * @param channel
+	 */
+	public void deleteChannel(Channel channel) {
+		this.mEntityManager.deleteChannelFile(channel);
 	}
 
 	/**

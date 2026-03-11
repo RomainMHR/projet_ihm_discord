@@ -13,13 +13,15 @@ import main.java.com.ubo.tp.message.ihm.login.LoginView;
 import main.java.com.ubo.tp.message.ihm.login.RegisterController;
 import main.java.com.ubo.tp.message.ihm.login.RegisterView;
 import main.java.com.ubo.tp.message.core.session.ISessionObserver;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
+import javax.swing.JOptionPane;
 
 /**
  * Classe principale l'application.
  *
  * @author S.Lucas
  */
-public class MessageApp implements ISessionObserver {
+public class MessageApp implements ISessionObserver, IMessageApp {
 	/**
 	 * Base de données.
 	 */
@@ -200,7 +202,7 @@ public class MessageApp implements ISessionObserver {
 		}
 
 		if (mMainView == null) {
-			this.mMainView = new MessageAppMainView(mSession, mDataManager);
+			this.mMainView = new MessageAppMainView(this, mSession, mDataManager);
 		}
 		this.mMainView.show();
 	}
@@ -218,5 +220,105 @@ public class MessageApp implements ISessionObserver {
 	@Override
 	public void notifyLogin(User user) {
 		this.showMainView();
+	}
+
+	@Override
+	public void showErrorMessage(String message) {
+		JOptionPane.showMessageDialog(mLoginFrame != null ? mLoginFrame : (mMainView != null ? mMainView.mFrame : null),
+				message, "Erreur", JOptionPane.ERROR_MESSAGE);
+	}
+
+	@Override
+	public void showInformationMessage(String message) {
+		javax.swing.JFrame parent = (mLoginFrame != null) ? mLoginFrame : (mMainView != null ? mMainView.mFrame : null);
+
+		final javax.swing.JWindow toast = new javax.swing.JWindow(parent);
+		toast.setBackground(new java.awt.Color(0, 0, 0, 0)); // Fond transparent
+
+		javax.swing.JPanel panel = new javax.swing.JPanel() {
+			@Override
+			protected void paintComponent(java.awt.Graphics g) {
+				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+						java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setColor(new java.awt.Color(0, 0, 0, 200)); // Noir avec alpha (~80%)
+				g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+				g2.dispose();
+				super.paintComponent(g);
+			}
+		};
+		panel.setOpaque(false);
+		panel.setLayout(new java.awt.BorderLayout());
+		panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 20, 15, 20));
+
+		javax.swing.JLabel label = new javax.swing.JLabel(message);
+		label.setForeground(java.awt.Color.WHITE);
+		label.setFont(label.getFont().deriveFont(java.awt.Font.BOLD, 14f));
+		panel.add(label, java.awt.BorderLayout.CENTER);
+
+		toast.add(panel);
+		toast.pack();
+
+		// Positionnement (en bas, centré par rapport à la fenêtre parente ou l'écran)
+		if (parent != null && parent.isVisible()) {
+			java.awt.Point parentLoc = parent.getLocationOnScreen();
+			java.awt.Dimension parentSize = parent.getSize();
+			int x = parentLoc.x + (parentSize.width - toast.getWidth()) / 2;
+			int y = parentLoc.y + parentSize.height - toast.getHeight() - 50;
+			toast.setLocation(x, y);
+		} else {
+			java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+			int x = (screenSize.width - toast.getWidth()) / 2;
+			int y = screenSize.height - toast.getHeight() - 100;
+			toast.setLocation(x, y);
+		}
+
+		// Animation d'opacité
+		toast.setOpacity(0.0f);
+		toast.setVisible(true);
+
+		// Timer pour l'apparition en fondu
+		javax.swing.Timer fadeInTimer = new javax.swing.Timer(20, null);
+		fadeInTimer.addActionListener(new java.awt.event.ActionListener() {
+			float opacity = 0.0f;
+
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				opacity += 0.05f;
+				if (opacity >= 1.0f) {
+					opacity = 1.0f;
+					fadeInTimer.stop();
+				}
+				toast.setOpacity(opacity);
+			}
+		});
+		fadeInTimer.start();
+
+		// Timer pour planifier la disparition après 3 secondes
+		javax.swing.Timer delayTimer = new javax.swing.Timer(3000, new java.awt.event.ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				// Timer pour la disparition en fondu
+				javax.swing.Timer fadeOutTimer = new javax.swing.Timer(20, null);
+				fadeOutTimer.addActionListener(new java.awt.event.ActionListener() {
+					float opacity = 1.0f;
+
+					@Override
+					public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+						opacity -= 0.05f;
+						if (opacity <= 0.0f) {
+							opacity = 0.0f;
+							fadeOutTimer.stop();
+							toast.dispose();
+						} else {
+							toast.setOpacity(opacity);
+						}
+					}
+				});
+				fadeOutTimer.start();
+			}
+		});
+		delayTimer.setRepeats(false);
+		delayTimer.start();
 	}
 }

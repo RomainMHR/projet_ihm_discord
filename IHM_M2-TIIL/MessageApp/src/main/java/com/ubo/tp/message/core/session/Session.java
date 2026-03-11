@@ -41,7 +41,8 @@ public class Session implements ISession {
 	public void connect(User connectedUser) {
 		this.mConnectedUser = connectedUser;
 
-		for (ISessionObserver observer : mObservers) {
+		List<ISessionObserver> copyOfObservers = new ArrayList<>(mObservers);
+		for (ISessionObserver observer : copyOfObservers) {
 			observer.notifyLogin(connectedUser);
 		}
 	}
@@ -50,7 +51,8 @@ public class Session implements ISession {
 	public void disconnect() {
 		this.mConnectedUser = null;
 
-		for (ISessionObserver observer : mObservers) {
+		List<ISessionObserver> copyOfObservers = new ArrayList<>(mObservers);
+		for (ISessionObserver observer : copyOfObservers) {
 			observer.notifyLogout();
 		}
 	}

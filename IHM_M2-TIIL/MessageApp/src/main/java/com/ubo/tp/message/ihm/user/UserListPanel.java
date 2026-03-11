@@ -12,11 +12,12 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import main.java.com.ubo.tp.message.datamodel.User;
+import main.java.com.ubo.tp.message.ihm.interfaces.IUserListView;
 
 /**
  * Vue pour afficher la liste des utilisateurs.
  */
-public class UserListPanel extends JPanel {
+public class UserListPanel extends JPanel implements IUserListView {
 
     protected UserController mController;
     protected JList<User> mUserList;
@@ -36,7 +37,33 @@ public class UserListPanel extends JPanel {
         // Titre
         JLabel titleLabel = new JLabel("Utilisateurs");
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        this.add(titleLabel, BorderLayout.NORTH);
+
+        // Barre de recherche
+        javax.swing.JTextField searchField = new javax.swing.JTextField();
+        searchField.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createEmptyBorder(2, 5, 2, 5),
+                javax.swing.BorderFactory.createTitledBorder("🔍 Rechercher")));
+        searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                mController.setSearchFilter(searchField.getText());
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                mController.setSearchFilter(searchField.getText());
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                mController.setSearchFilter(searchField.getText());
+            }
+        });
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(titleLabel, BorderLayout.NORTH);
+        topPanel.add(searchField, BorderLayout.SOUTH);
+        this.add(topPanel, BorderLayout.NORTH);
 
         // Liste des utilisateurs
         mListModel = new DefaultListModel<>();
@@ -48,6 +75,7 @@ public class UserListPanel extends JPanel {
         this.add(scrollPane, BorderLayout.CENTER);
     }
 
+    @Override
     public void updateUserList(Set<User> users) {
         mListModel.clear();
         for (User user : users) {
@@ -57,6 +85,11 @@ public class UserListPanel extends JPanel {
 
     public void addSelectionListener(javax.swing.event.ListSelectionListener listener) {
         mUserList.addListSelectionListener(listener);
+    }
+
+    @Override
+    public void clearSelection() {
+        mUserList.clearSelection();
     }
 
     public User getSelectedUser() {
@@ -72,8 +105,9 @@ public class UserListPanel extends JPanel {
                 boolean isSelected, boolean cellHasFocus) {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value instanceof User) {
-                User user = (User) value;
-                setText(user.getName() + " (@" + user.getUserTag() + ")");
+                User u = (User) value;
+                String status = u.isOnline() ? "🟢 " : "⚪ ";
+                setText(status + u.getName() + " (@" + u.getUserTag() + ")");
             }
             return this;
         }

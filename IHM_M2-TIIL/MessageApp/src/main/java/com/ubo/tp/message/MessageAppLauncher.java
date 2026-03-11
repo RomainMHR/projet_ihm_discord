@@ -17,7 +17,7 @@ public class MessageAppLauncher {
 	/**
 	 * Indique si le mode bouchoné est activé.
 	 */
-	protected static boolean IS_MOCK_ENABLED = true;
+	protected static boolean IS_MOCK_ENABLED = false;
 
 	/**
 	 * Launcher.
@@ -42,6 +42,12 @@ public class MessageAppLauncher {
 		MessageApp messageApp = new MessageApp(dataManager);
 		messageApp.init();
 		messageApp.show();
+
+		// Lancement de l'interface JavaFX en parallèle
+		main.java.com.ubo.tp.message.ihm.MessageAppFx.setSharedDataManager(dataManager);
+		new Thread(() -> {
+			javafx.application.Application.launch(main.java.com.ubo.tp.message.ihm.MessageAppFx.class, args);
+		}).start();
 
 	}
 }

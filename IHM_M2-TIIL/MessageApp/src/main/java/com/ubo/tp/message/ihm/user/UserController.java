@@ -10,6 +10,7 @@ import main.java.com.ubo.tp.message.core.session.ISession;
 import main.java.com.ubo.tp.message.datamodel.Channel;
 import main.java.com.ubo.tp.message.datamodel.Message;
 import main.java.com.ubo.tp.message.datamodel.User;
+import main.java.com.ubo.tp.message.ihm.interfaces.IUserListView;
 
 /**
  * Contrôleur pour la gestion des utilisateurs.
@@ -18,7 +19,7 @@ public class UserController implements IDatabaseObserver {
 
     protected DataManager mDataManager;
     protected ISession mSession;
-    protected UserListPanel mView;
+    protected IUserListView mView;
 
     public UserController(DataManager dataManager, ISession session) {
         this.mDataManager = dataManager;
@@ -28,19 +29,64 @@ public class UserController implements IDatabaseObserver {
         this.mDataManager.addObserver(this);
     }
 
-    public void setView(UserListPanel view) {
+    /**
+     * Nettoie le contrôleur en le désinscrivant du DataManager.
+     */
+    public void dispose() {
+        this.mDataManager.removeObserver(this);
+    }
+
+    protected Channel mCurrentChannelFilter;
+
+    public void setView(IUserListView view) {
         this.mView = view;
+        this.refreshView();
+    }
+
+    public void setCurrentChannelFilter(Channel channel) {
+        this.mCurrentChannelFilter = channel;
+        this.refreshView();
+    }
+
+    protected String mSearchFilter = "";
+
+    public void setSearchFilter(String filter) {
+        this.mSearchFilter = (filter == null) ? "" : filter.trim().toLowerCase();
         this.refreshView();
     }
 
     protected void refreshView() {
         if (mView != null) {
             Set<User> users = new HashSet<>();
-            for (User user : mDataManager.getUsers()) {
-                if (!user.getUuid().equals(Constants.UNKNONWN_USER_UUID)) {
-                    users.add(user);
+
+            if (mCurrentChannelFilter != null && mCurrentChannelFilter.isPrivate()) {
+                users.addAll(mCurrentChannelFilter.getUsers());
+            } else if (mCurrentChannelFilter != null) {
+                for (User user : mDataManager.getUsers()) {
+                    if (!user.getUuid().equals(Constants.UNKNONWN_USER_UUID)) {
+                        users.add(user);
+                    }
+                }
+            } else {
+                for (User user : mDataManager.getUsers()) {
+                    if (!user.getUuid().equals(Constants.UNKNONWN_USER_UUID)) {
+                        users.add(user);
+                    }
                 }
             }
+
+            // Appliquer le filtre de recherche
+            if (!mSearchFilter.isEmpty()) {
+                Set<User> filtered = new HashSet<>();
+                for (User u : users) {
+                    if (u.getName().toLowerCase().contains(mSearchFilter)
+                            || u.getUserTag().toLowerCase().contains(mSearchFilter)) {
+                        filtered.add(u);
+                    }
+                }
+                users = filtered;
+            }
+
             mView.updateUserList(users);
         }
     }
@@ -89,6 +135,9 @@ public class UserController implements IDatabaseObserver {
 
     @Override
     public void notifyChannelModified(Channel channel) {
-        // Pas d'action pour l'instant
+        if (mCurrentChannelFilter != null && mCurrentChannelFilter.getUuid().equals(channel.getUuid())) {
+            this.mCurrentChannelFilter = channel;
+            this.refreshView();
+        }
     }
 }

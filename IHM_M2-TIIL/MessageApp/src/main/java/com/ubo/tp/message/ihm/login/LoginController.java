@@ -1,8 +1,6 @@
 package main.java.com.ubo.tp.message.ihm.login;
 
-import javax.swing.JOptionPane;
-
-import main.java.com.ubo.tp.message.ihm.MessageApp;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.session.ISession;
@@ -15,23 +13,17 @@ public class LoginController {
 
     protected DataManager mDataManager;
     protected ISession mSession;
-    protected MessageApp mMessageApp;
-    protected LoginView mView;
+    protected IMessageApp mMessageApp;
 
-    public LoginController(MessageApp messageApp, DataManager dataManager, ISession session) {
+    public LoginController(IMessageApp messageApp, DataManager dataManager, ISession session) {
         this.mMessageApp = messageApp;
         this.mDataManager = dataManager;
         this.mSession = session;
     }
 
-    public void setView(LoginView view) {
-        this.mView = view;
-    }
-
     public void login(String tag, String password) {
         if (tag.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(mView, "Veuillez remplir tous les champs.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
+            mMessageApp.showErrorMessage("Veuillez remplir tous les champs.");
             return;
         }
 
@@ -46,17 +38,18 @@ public class LoginController {
 
         if (foundUser != null && foundUser.getUserPassword().equals(password)) {
             // SRS-MAP-USR-004 : Connexion
+            foundUser.setOnline(true);
+            mDataManager.sendUser(foundUser);
             mSession.connect(foundUser);
-            JOptionPane.showMessageDialog(mView, "Connexion réussie ! Bienvenue " + foundUser.getName(), "Succès",
-                    JOptionPane.INFORMATION_MESSAGE);
+            mMessageApp.showInformationMessage("Connexion réussie ! Bienvenue " + foundUser.getName());
             mMessageApp.notifyLogin(foundUser);
         } else {
-            JOptionPane.showMessageDialog(mView, "Identifiant ou mot de passe incorrect.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
+            mMessageApp.showErrorMessage("Identifiant ou mot de passe incorrect.");
         }
     }
 
     public void goToRegister() {
         mMessageApp.showRegisterView();
     }
+
 }

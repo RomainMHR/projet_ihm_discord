@@ -8,10 +8,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageInputView;
+
 /**
  * Vue pour la saisie et l'envoi d'un message.
  */
-public class MessageInputPanel extends JPanel {
+public class MessageInputPanel extends JPanel implements IMessageInputView {
 
     protected MessageController mController;
     protected JTextField mInputField;
@@ -59,6 +61,7 @@ public class MessageInputPanel extends JPanel {
     /**
      * Permet de donner le focus au champ texte.
      */
+    @Override
     public void focusInput() {
         mInputField.requestFocusInWindow();
     }

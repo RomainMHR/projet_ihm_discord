@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.session.Session;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
 
 /**
  * Classe de la vue principale de l'application.
@@ -35,8 +36,10 @@ public class MessageAppMainView {
     protected JMenuItem mLogoutItem;
 
     protected DataManager mDataManager;
+    protected IMessageApp mMessageApp;
 
-    public MessageAppMainView(Session mSession, DataManager dataManager) {
+    public MessageAppMainView(IMessageApp messageApp, Session mSession, DataManager dataManager) {
+        this.mMessageApp = messageApp;
         this.mSession = mSession;
         this.mDataManager = dataManager;
         this.initGUI();
@@ -76,6 +79,11 @@ public class MessageAppMainView {
         mExitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                main.java.com.ubo.tp.message.datamodel.User u = mSession.getConnectedUser();
+                if (u != null) {
+                    u.setOnline(false);
+                    mDataManager.sendUser(u);
+                }
                 System.exit(0);
             }
         });
@@ -97,6 +105,11 @@ public class MessageAppMainView {
         mLogoutItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                main.java.com.ubo.tp.message.datamodel.User u = mSession.getConnectedUser();
+                if (u != null) {
+                    u.setOnline(false);
+                    mDataManager.sendUser(u);
+                }
                 mSession.disconnect();
             }
         });
@@ -192,11 +205,11 @@ public class MessageAppMainView {
     protected void initContent() {
         // Création du contrôleur et de la vue des messages
         main.java.com.ubo.tp.message.ihm.message.MessageView messageView = new main.java.com.ubo.tp.message.ihm.message.MessageView(
-                mDataManager, mSession);
+                mMessageApp, mDataManager, mSession);
 
         // Création du contrôleur et de la vue des canaux
         main.java.com.ubo.tp.message.ihm.channel.ChannelController channelController = new main.java.com.ubo.tp.message.ihm.channel.ChannelController(
-                mDataManager, mSession);
+                mMessageApp, mDataManager, mSession);
         final main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel channelListPanel = new main.java.com.ubo.tp.message.ihm.channel.ChannelListPanel(
                 channelController);
 
@@ -210,6 +223,23 @@ public class MessageAppMainView {
                 userController);
         mFrame.add(userListPanel, BorderLayout.EAST);
 
+        // Ajout de l'observation de session pour le nettoyage (empêche les Zombie
+        // Listeners Swing)
+        mSession.addObserver(new main.java.com.ubo.tp.message.core.session.ISessionObserver() {
+            @Override
+            public void notifyLogin(main.java.com.ubo.tp.message.datamodel.User user) {
+            }
+
+            @Override
+            public void notifyLogout() {
+                // Nettoyage des contrôleurs existants de ce MainView
+                messageView.getController().dispose();
+                channelController.dispose();
+                userController.dispose();
+                mSession.removeObserver(this);
+            }
+        });
+
         // Au centre : les messages
         this.setMainPanel(messageView);
 
@@ -217,10 +247,31 @@ public class MessageAppMainView {
         channelListPanel.addSelectionListener(new javax.swing.event.ListSelectionListener() {
             @Override
             public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
+                if (!e.getValueIsAdjusting() && !channelListPanel.isUpdating()) {
                     main.java.com.ubo.tp.message.datamodel.Channel selected = channelListPanel.getSelectedChannel();
                     if (selected != null) {
                         messageView.getController().setCurrentRecipient(selected.getUuid(), selected.getName());
+                        userController.setCurrentChannelFilter(selected);
+                        channelController.markChannelAsRead(selected.getUuid());
+                    } else {
+                        userController.setCurrentChannelFilter(null);
+                    }
+                }
+            }
+        });
+
+        userListPanel.addSelectionListener(new javax.swing.event.ListSelectionListener() {
+            @Override
+            public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    main.java.com.ubo.tp.message.datamodel.User selectedUser = userListPanel.getSelectedUser();
+                    if (selectedUser != null) {
+                        main.java.com.ubo.tp.message.datamodel.Channel dmChannel = channelController
+                                .findOrCreateDirectMessageChannel(selectedUser);
+                        if (dmChannel != null) {
+                            messageView.getController().setCurrentRecipient(dmChannel.getUuid(),
+                                    selectedUser.getName());
+                        }
                     }
                 }
             }

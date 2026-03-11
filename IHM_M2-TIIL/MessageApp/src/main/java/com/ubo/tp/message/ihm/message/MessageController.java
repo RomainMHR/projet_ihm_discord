@@ -2,12 +2,14 @@ package main.java.com.ubo.tp.message.ihm.message;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.swing.JOptionPane;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageApp;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageInputView;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageListView;
+import main.java.com.ubo.tp.message.ihm.interfaces.IMessageMainView;
 
 import main.java.com.ubo.tp.message.core.DataManager;
 import main.java.com.ubo.tp.message.core.database.IDatabaseObserver;
@@ -23,30 +25,49 @@ public class MessageController implements IDatabaseObserver {
 
     protected DataManager mDataManager;
     protected ISession mSession;
-    protected MessageInputPanel mView;
-    protected MessageListPanel mListView;
-    protected MessageView mMainView;
+    protected IMessageApp mMessageApp;
+    protected IMessageInputView mView;
+    protected IMessageListView mListView;
+    protected IMessageMainView mMainView;
 
     /**
      * Destinataire actuellement sélectionné (Canal ou Utilisateur)
      */
     protected UUID mCurrentRecipientUuid;
 
-    public MessageController(DataManager dataManager, ISession session) {
+    /**
+     * Timestamp de démarrage du contrôleur (pour ignorer les messages existants).
+     */
+    protected long mStartTimestamp;
+
+    public MessageController(IMessageApp messageApp, DataManager dataManager, ISession session) {
+        this.mMessageApp = messageApp;
         this.mDataManager = dataManager;
         this.mSession = session;
+        this.mStartTimestamp = System.currentTimeMillis();
         this.mDataManager.addObserver(this);
     }
 
-    public void setMainView(MessageView view) {
+    /**
+     * Nettoie le contrôleur en le désinscrivant du DataManager.
+     */
+    public void dispose() {
+        this.mDataManager.removeObserver(this);
+    }
+
+    public User getConnectedUser() {
+        return mSession.getConnectedUser();
+    }
+
+    public void setMainView(IMessageMainView view) {
         this.mMainView = view;
     }
 
-    public void setView(MessageInputPanel view) {
+    public void setView(IMessageInputView view) {
         this.mView = view;
     }
 
-    public void setListView(MessageListPanel view) {
+    public void setListView(IMessageListView view) {
         this.mListView = view;
         this.refreshListView();
     }
@@ -65,6 +86,16 @@ public class MessageController implements IDatabaseObserver {
         }
     }
 
+    /**
+     * Filtre de recherche courant (texte libre).
+     */
+    protected String mSearchFilter = "";
+
+    public void setSearchFilter(String filter) {
+        this.mSearchFilter = (filter == null) ? "" : filter.trim().toLowerCase();
+        this.refreshListView();
+    }
+
     protected void refreshListView() {
         if (mListView == null) {
             return;
@@ -77,32 +108,26 @@ public class MessageController implements IDatabaseObserver {
         List<Message> conversationMessages = new ArrayList<>();
         Set<Message> allMessages = mDataManager.getMessages();
 
-        // On peut afficher tous les messages envoyés vers le recipient actuel.
-        // On récupère aussi les messages qu'on a envoyé au recipient (si c'est un
-        // User).
         for (Message msg : allMessages) {
             boolean isToRecipient = msg.getRecipient().equals(mCurrentRecipientUuid);
             boolean isFromRecipientToUs = false;
 
-            // Si c'est un chat 1-to-1, il faut aussi afficher les messages que l'autre nous
-            // a envoyé
             if (mSession.getConnectedUser() != null) {
                 isFromRecipientToUs = msg.getSender().getUuid().equals(mCurrentRecipientUuid)
                         && msg.getRecipient().equals(mSession.getConnectedUser().getUuid());
             }
 
             if (isToRecipient || isFromRecipientToUs) {
-                conversationMessages.add(msg);
+                // Appliquer le filtre de recherche
+                if (mSearchFilter.isEmpty() || msg.getText().toLowerCase().contains(mSearchFilter)
+                        || msg.getSender().getName().toLowerCase().contains(mSearchFilter)) {
+                    conversationMessages.add(msg);
+                }
             }
         }
 
         // Tri chronologique
-        Collections.sort(conversationMessages, new Comparator<Message>() {
-            @Override
-            public int compare(Message m1, Message m2) {
-                return Long.compare(m1.getEmissionDate(), m2.getEmissionDate());
-            }
-        });
+        Collections.sort(conversationMessages, (m1, m2) -> Long.compare(m1.getEmissionDate(), m2.getEmissionDate()));
 
         mListView.updateMessageList(conversationMessages);
     }
@@ -115,17 +140,20 @@ public class MessageController implements IDatabaseObserver {
             return;
         }
 
+        if (text.length() > 200) {
+            mMessageApp.showErrorMessage("Le message est trop long. Il ne doit pas dépasser 200 caractères.");
+            return;
+        }
+
         if (mCurrentRecipientUuid == null) {
-            JOptionPane.showMessageDialog(mView,
-                    "Veuillez sélectionner un destinataire (canal ou utilisateur) avant d'envoyer un message.",
-                    "Erreur", JOptionPane.WARNING_MESSAGE);
+            mMessageApp.showErrorMessage(
+                    "Veuillez sélectionner un destinataire (canal ou utilisateur) avant d'envoyer un message.");
             return;
         }
 
         User sender = mSession.getConnectedUser();
         if (sender == null) {
-            JOptionPane.showMessageDialog(mView, "Vous devez être connecté pour envoyer un message.", "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
+            mMessageApp.showErrorMessage("Vous devez être connecté pour envoyer un message.");
             return;
         }
 
@@ -135,9 +163,74 @@ public class MessageController implements IDatabaseObserver {
 
     // --- IDatabaseObserver ---
 
+    /**
+     * Supprime un message si l'utilisateur connecté en est l'auteur.
+     */
+    public void deleteMessage(Message message) {
+        User currentUser = mSession.getConnectedUser();
+        if (message == null || currentUser == null) {
+            return;
+        }
+        if (!message.getSender().getUuid().equals(currentUser.getUuid())) {
+            mMessageApp.showErrorMessage("Vous ne pouvez supprimer que vos propres messages.");
+            return;
+        }
+        mDataManager.deleteMessage(message);
+    }
+
     @Override
     public void notifyMessageAdded(Message message) {
         this.refreshListView();
+
+        // Vérifier si une notification doit être affichée
+        if (message == null) {
+            return;
+        }
+
+        // Ignorer les anciens messages chargés au démarrage de l'application
+        if (message.getEmissionDate() < mStartTimestamp) {
+            return;
+        }
+        User currentUser = mSession.getConnectedUser();
+        if (currentUser == null) {
+            return;
+        }
+        // Ne pas notifier pour ses propres messages
+        if (message.getSender().getUuid().equals(currentUser.getUuid())) {
+            return;
+        }
+
+        String senderName = message.getSender().getName();
+
+        // Cas 1 : Message direct (le message est dans un canal DM dont l'utilisateur
+        // est membre)
+        for (Channel c : mDataManager.getChannels()) {
+            if (c.isDirectMessage() && c.getUuid().equals(message.getRecipient())
+                    && c.getUsers().contains(currentUser)) {
+                mMessageApp.showInformationMessage(
+                        "💬 Nouveau message privé de " + senderName + " : " + truncate(message.getText(), 50));
+                return;
+            }
+        }
+
+        // Cas 2 : Mention dans un canal
+        String myName = currentUser.getName().toLowerCase();
+        String myTag = currentUser.getUserTag().toLowerCase();
+        String msgText = message.getText().toLowerCase();
+        if (msgText.contains("@" + myName) || msgText.contains("@" + myTag)) {
+            mMessageApp.showInformationMessage(
+                    "🔔 " + senderName + " vous a mentionné : " + truncate(message.getText(), 50));
+        }
+    }
+
+    /**
+     * Tronque un texte à la longueur maximale donnée.
+     */
+    protected String truncate(String text, int maxLength) {
+        if (text.length() <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + "...";
     }
 
     @Override

@@ -42,6 +42,11 @@ public class DataFilesManager {
 	protected static final String PROPERTY_KEY_NAME = "Name";
 
 	/**
+	 * Clé du fichier de propriété pour l'attribut online
+	 */
+	protected static final String PROPERTY_KEY_ONLINE = "Online";
+
+	/**
 	 * Clé du fichier de propriété pour l'attribut Sender
 	 */
 	protected static final String PROPERTY_KEY_MESSAGE_SENDER = "Sender";
@@ -72,6 +77,11 @@ public class DataFilesManager {
 	protected static final String PROPERTY_KEY_CHANNEL_USERS = "Users";
 
 	/**
+	 * Clé du fichier de propriété pour l'attribut DirectMessage
+	 */
+	protected static final String PROPERTY_KEY_DIRECT_MESSAGE = "DirectMessage";
+
+	/**
 	 * Séparateur pour les utilisateurs.
 	 */
 	protected static final String USER_SEPARATOR = ";";
@@ -96,8 +106,10 @@ public class DataFilesManager {
 			String tag = properties.getProperty(PROPERTY_KEY_USER_TAG, "NoTag");
 			String password = decrypt(properties.getProperty(PROPERTY_KEY_USER_PASSWORD, "NoPassword"));
 			String name = properties.getProperty(PROPERTY_KEY_NAME, "NoName");
+			String online = properties.getProperty(PROPERTY_KEY_ONLINE, "false");
 
 			user = new User(UUID.fromString(uuid), tag, password, name);
+			user.setOnline(Boolean.parseBoolean(online));
 		}
 
 		return user;
@@ -118,6 +130,7 @@ public class DataFilesManager {
 		properties.setProperty(PROPERTY_KEY_USER_TAG, user.getUserTag());
 		properties.setProperty(PROPERTY_KEY_USER_PASSWORD, encrypt(user.getUserPassword()));
 		properties.setProperty(PROPERTY_KEY_NAME, user.getName());
+		properties.setProperty(PROPERTY_KEY_ONLINE, Boolean.toString(user.isOnline()));
 
 		PropertiesManager.writeProperties(properties, destFileName);
 	}
@@ -150,8 +163,22 @@ public class DataFilesManager {
 		properties.setProperty(PROPERTY_KEY_NAME, channel.getName());
 		properties.setProperty(PROPERTY_KEY_CHANNEL_CREATOR, channel.getCreator().getUuid().toString());
 		properties.setProperty(PROPERTY_KEY_CHANNEL_USERS, this.getUsersAsString(channel.getUsers()));
+		properties.setProperty(PROPERTY_KEY_DIRECT_MESSAGE, String.valueOf(channel.isDirectMessage()));
 
 		PropertiesManager.writeProperties(properties, destFileName);
+	}
+
+	/**
+	 * Suppression d'un fichier pour un canal ({@link Channel}).
+	 *
+	 * @param channel Canal à supprimer.
+	 */
+	public void deleteChannelFile(Channel channel) {
+		String destFileName = this.getFileName(channel.getUuid(), Constants.CHANNEL_FILE_EXTENSION);
+		File file = new File(destFileName);
+		if (file.exists()) {
+			file.delete();
+		}
 	}
 
 	/**
@@ -177,6 +204,9 @@ public class DataFilesManager {
 			List<User> allUsers = this.getUsersFromString(channelUsers, userMap);
 
 			channel = new Channel(UUID.fromString(uuid), creator, channelName, allUsers);
+
+			String directMessage = properties.getProperty(PROPERTY_KEY_DIRECT_MESSAGE, "false");
+			channel.setDirectMessage(Boolean.parseBoolean(directMessage));
 		}
 
 		return channel;
@@ -233,6 +263,19 @@ public class DataFilesManager {
 	}
 
 	/**
+	 * Suppression d'un fichier pour un message ({@link Message}).
+	 *
+	 * @param message Message à supprimer.
+	 */
+	public void deleteMessageFile(Message message) {
+		String destFileName = this.getFileName(message.getUuid(), Constants.MESSAGE_FILE_EXTENSION);
+		File file = new File(destFileName);
+		if (file.exists()) {
+			file.delete();
+		}
+	}
+
+	/**
 	 * Récupération de l'utilisateur identifié.
 	 * 
 	 * @param uuid
@@ -279,7 +322,7 @@ public class DataFilesManager {
 
 		Iterator<User> iterator = users.iterator();
 		while (iterator.hasNext()) {
-			usersAsString += iterator.next();
+			usersAsString += iterator.next().getUuid().toString();
 
 			if (iterator.hasNext()) {
 				usersAsString += USER_SEPARATOR;

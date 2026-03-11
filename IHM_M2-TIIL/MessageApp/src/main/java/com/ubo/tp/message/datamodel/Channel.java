@@ -29,6 +29,12 @@ public class Channel extends AbstractMessageAppObject implements IMessageRecipie
 	protected boolean mPrivate;
 
 	/**
+	 * Indique si ce canal est un canal de message direct (DM) entre deux
+	 * utilisateurs.
+	 */
+	protected boolean mDirectMessage;
+
+	/**
 	 * Liste des Utilisateurs du canal.
 	 */
 	protected final Set<User> mUsers = new HashSet<User>();
@@ -91,6 +97,27 @@ public class Channel extends AbstractMessageAppObject implements IMessageRecipie
 	}
 
 	/**
+	 * @return boolean indiquant si le canal est privé.
+	 */
+	public boolean isPrivate() {
+		return mPrivate;
+	}
+
+	/**
+	 * @return true si ce canal est un canal de message direct.
+	 */
+	public boolean isDirectMessage() {
+		return mDirectMessage;
+	}
+
+	/**
+	 * Définit si ce canal est un canal de message direct.
+	 */
+	public void setDirectMessage(boolean directMessage) {
+		this.mDirectMessage = directMessage;
+	}
+
+	/**
 	 * @return le corps du message.
 	 */
 	public String getName() {
@@ -102,6 +129,24 @@ public class Channel extends AbstractMessageAppObject implements IMessageRecipie
 	 */
 	public List<User> getUsers() {
 		return new ArrayList<User>(mUsers);
+	}
+
+	/**
+	 * Ajoute un utilisateur au canal privé.
+	 */
+	public void addUser(User user) {
+		if (mPrivate && user != null) {
+			mUsers.add(user);
+		}
+	}
+
+	/**
+	 * Supprime un utilisateur du canal privé.
+	 */
+	public void removeUser(User user) {
+		if (mPrivate && user != null) {
+			mUsers.remove(user);
+		}
 	}
 
 	/**
