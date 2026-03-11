@@ -194,17 +194,19 @@ public class ChannelController implements IDatabaseObserver {
     public void deleteChannel(Channel channel) {
         User currentUser = mSession.getConnectedUser();
         if (channel != null && currentUser != null && channel.getCreator().getUuid().equals(currentUser.getUuid())) {
-            // Seul le créateur peut supprimer le canal, qu'il soit public ou privé.
-            // On peut restreindre juste pour les privés ou tout le monde : Restreignons
-            // pour tous pour cohérence
-            // Pour être sûr, la spécification dit "supprimer un canal privé dont il est le
-            // propriétaire"
-            mDataManager.getChannels().remove(channel); // Avertissement: la BDD gère pas forcément la suppression
-                                                        // physique directe sur ce set
-            // mDataManager n'a pas mis en cache de fonction sendDeletChannel,
-            // l'EntityManager le gère
-            // Mais l'EntityManager peut ne pas l'avoir si DataManager ne l'expose pas...
-            // En regardant l'API DataManager, on a deleteUser, pas deleteChannel :(
+            // 1. Suppression en cascade des messages liés au canal
+            java.util.Set<Message> messagesToDelete = new java.util.HashSet<>();
+            for (Message msg : mDataManager.getMessages()) {
+                if (msg.getRecipient().equals(channel.getUuid())) {
+                    messagesToDelete.add(msg);
+                }
+            }
+            for (Message msg : messagesToDelete) {
+                mDataManager.deleteMessage(msg);
+            }
+
+            // 2. Suppression du canal lui-même
+            mDataManager.deleteChannel(channel);
         }
     }
 
