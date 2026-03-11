@@ -46,7 +46,14 @@ public class MessageAppFx extends Application implements ISessionObserver, IMess
 
         this.mStage.setTitle("MessageApp - JavaFX");
         this.mStage.setOnCloseRequest(event -> {
+            User u = mSession.getConnectedUser();
+            if (u != null && mDataManager != null) {
+                u.setOnline(false);
+                mDataManager.sendUser(u);
+                System.out.println("Déconnexion automatique de " + u.getName() + " (JavaFX)");
+            }
             Platform.exit();
+            System.exit(0);
         });
 
         this.showLoginView();

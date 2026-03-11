@@ -253,6 +253,9 @@ public class MessageAppMainView {
                         messageView.getController().setCurrentRecipient(selected.getUuid(), selected.getName());
                         userController.setCurrentChannelFilter(selected);
                         channelController.markChannelAsRead(selected.getUuid());
+
+                        // Désélection croisée
+                        userListPanel.clearSelection();
                     } else {
                         userController.setCurrentChannelFilter(null);
                     }
@@ -271,6 +274,9 @@ public class MessageAppMainView {
                         if (dmChannel != null) {
                             messageView.getController().setCurrentRecipient(dmChannel.getUuid(),
                                     selectedUser.getName());
+
+                            // Désélection croisée
+                            channelListPanel.clearSelection();
                         }
                     }
                 }

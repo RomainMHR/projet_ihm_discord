@@ -47,6 +47,9 @@ public class MessageListPanelFx extends VBox implements IMessageListView {
                     prefixText.setStyle("-fx-font-weight: bold;");
                     textFlow.getChildren().add(prefixText);
 
+                    // Forcer le wrap en liant la largeur du TextFlow à celle de la liste
+                    textFlow.prefWidthProperty().bind(mMessageList.widthProperty().subtract(40));
+
                     // Parser le texte pour trouver les @mentions
                     String msgText = msg.getText();
                     main.java.com.ubo.tp.message.datamodel.User currentUser = mController.getConnectedUser();

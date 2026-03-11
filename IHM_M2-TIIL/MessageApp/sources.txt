@@ -51,4 +51,3 @@ C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\ma
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\ihm\user\UserController.java
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\ihm\user\UserListPanel.java
 C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\main\java\com\ubo\tp\message\ihm\user\UserListPanelFx.java
-C:\Users\romai\Documents\GitHub\projet_ihm_discord\IHM_M2-TIIL\MessageApp\src\mock\MessageAppMock.java

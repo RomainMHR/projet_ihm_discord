@@ -96,11 +96,25 @@ public class MessageListPanel extends JPanel implements IMessageListView {
                 Message msg = (Message) value;
                 String dateStr = mDateFormat.format(new Date(msg.getEmissionDate()));
                 main.java.com.ubo.tp.message.datamodel.User currentUser = mController.getConnectedUser();
-                String styledText = styleMentions(msg.getText(), currentUser);
-                setText(String.format("<html>[%s] <b>%s</b>: %s</html>", dateStr, msg.getSender().getName(),
-                        styledText));
+
+                // Échapper le texte brut avant de styliser les mentions
+                String escapedText = escapeHTML(msg.getText());
+                String styledText = styleMentions(escapedText, currentUser);
+
+                // Utiliser un div avec word-wrap pour forcer le retour à la ligne
+                // La largeur est approximative par rapport à la liste
+                setText(String.format(
+                        "<html><div style='width: 350px; word-wrap: break-word;'>[%s] <b>%s</b>: %s</div></html>",
+                        dateStr, msg.getSender().getName(), styledText));
             }
             return this;
+        }
+
+        private String escapeHTML(String s) {
+            if (s == null)
+                return "";
+            return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'",
+                    "&#39;");
         }
     }
 
