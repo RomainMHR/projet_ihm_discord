@@ -44,7 +44,21 @@ public class MessageAppMainViewFx extends BorderPane {
             }
             System.exit(0);
         });
-        fileMenu.getItems().add(exitItem);
+        MenuItem turboItem = new MenuItem("Passer en mode turbo");
+        turboItem.setOnAction(e -> {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Mode Turbo");
+            alert.setHeaderText("Le mode turbo arrive bientôt !");
+            alert.setContentText("Les fonctionnalités suivantes seront disponibles dans les prochains patchs :\n\n"
+                    + "- Envoi d'images dans les messages\n"
+                    + "- Chat-bot dédié\n"
+                    + "- Réactions aux messages (❤️, 👍, etc.)\n"
+                    + "- Support complet des emojis\n"
+                    + "- Easter eggs interactifs (/party, /flip, /earthquake)");
+            alert.showAndWait();
+        });
+
+        fileMenu.getItems().addAll(exitItem, turboItem);
 
         Menu themeMenu = new Menu("Thèmes");
         javafx.scene.control.ToggleGroup themeGroup = new javafx.scene.control.ToggleGroup();

@@ -115,6 +115,23 @@ public class MessageAppMainView {
         });
 
         mFileMenu.add(mExitItem);
+
+        JMenuItem mTurboItem = new JMenuItem("Passer en mode turbo");
+        mTurboItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(mFrame,
+                        "Le mode turbo arrive bientôt !\n\nLes fonctionnalités suivantes seront disponibles dans les prochains patchs :\n"
+                                + "- Envoi d'images dans les messages\n"
+                                + "- Chat-bot dédié\n"
+                                + "- Réactions aux messages (❤️, 👍, etc.)\n"
+                                + "- Support complet des emojis\n"
+                                + "- Easter eggs interactifs (/party, /flip, /earthquake)",
+                        "Mode Turbo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        mFileMenu.add(mTurboItem);
+
         mHelpMenu.add(mAboutItem);
         mLogoutMenu.add(mLogoutItem);
 
