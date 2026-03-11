@@ -195,6 +195,13 @@ public class MessageController implements IDatabaseObserver {
         if (currentUser == null) {
             return;
         }
+
+        // --- Easter Eggs (déclenchés même pour ses propres messages) ---
+        String msgText = message.getText().trim().toLowerCase();
+        if (msgText.equals("/party") || msgText.equals("/flip") || msgText.equals("/earthquake")) {
+            mMessageApp.triggerEasterEgg(msgText.substring(1));
+        }
+
         // Ne pas notifier pour ses propres messages
         if (message.getSender().getUuid().equals(currentUser.getUuid())) {
             return;
@@ -216,8 +223,8 @@ public class MessageController implements IDatabaseObserver {
         // Cas 2 : Mention dans un canal
         String myName = currentUser.getName().toLowerCase();
         String myTag = currentUser.getUserTag().toLowerCase();
-        String msgText = message.getText().toLowerCase();
-        if (msgText.contains("@" + myName) || msgText.contains("@" + myTag)) {
+        String msgContent = message.getText().toLowerCase();
+        if (msgContent.contains("@" + myName) || msgContent.contains("@" + myTag)) {
             mMessageApp.showInformationMessage(
                     "🔔 " + senderName + " vous a mentionné : " + truncate(message.getText(), 50));
         }

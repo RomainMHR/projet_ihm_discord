@@ -38,10 +38,10 @@ public class Database implements IDatabase {
 	 * Constructeur.
 	 */
 	public Database() {
-		mUsers = new HashSet<>();
-		mMessages = new HashSet<>();
-		mObservers = new HashSet<>();
-		mChannels = new HashSet<>();
+		mUsers = java.util.concurrent.ConcurrentHashMap.newKeySet();
+		mMessages = java.util.concurrent.ConcurrentHashMap.newKeySet();
+		mObservers = new java.util.concurrent.CopyOnWriteArraySet<>();
+		mChannels = java.util.concurrent.ConcurrentHashMap.newKeySet();
 	}
 
 	@Override

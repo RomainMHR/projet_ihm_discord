@@ -115,6 +115,21 @@ public class MessageAppMainView {
         });
 
         mFileMenu.add(mExitItem);
+
+        JMenuItem mTurboItem = new JMenuItem("Passer en mode turbo");
+        mTurboItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(mFrame,
+                        "Le mode turbo arrive bientôt !\n\nLes fonctionnalités suivantes seront disponibles dans les prochains patchs :\n"
+                                + "- Envoi d'images dans les messages\n"
+                                + "- Chat-bot dédié\n"
+                                + "- Réactions aux messages (❤️, 👍, etc.)",
+                        "Mode Turbo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        mFileMenu.add(mTurboItem);
+
         mHelpMenu.add(mAboutItem);
         mLogoutMenu.add(mLogoutItem);
 
@@ -253,6 +268,9 @@ public class MessageAppMainView {
                         messageView.getController().setCurrentRecipient(selected.getUuid(), selected.getName());
                         userController.setCurrentChannelFilter(selected);
                         channelController.markChannelAsRead(selected.getUuid());
+
+                        // Désélection croisée
+                        userListPanel.clearSelection();
                     } else {
                         userController.setCurrentChannelFilter(null);
                     }
@@ -271,6 +289,9 @@ public class MessageAppMainView {
                         if (dmChannel != null) {
                             messageView.getController().setCurrentRecipient(dmChannel.getUuid(),
                                     selectedUser.getName());
+
+                            // Désélection croisée
+                            channelListPanel.clearSelection();
                         }
                     }
                 }

@@ -1,0 +1,75 @@
+/* Thème Discord "Gamer Mode" */
+.root {
+    -fx-base: #36393f;
+    -fx-background: #36393f;
+    -fx-control-inner-background: #2f3136;
+    -fx-control-inner-background-alt: #2f3136;
+    -fx-color: #202225;
+    -fx-text-base-color: #dcddde;
+    -fx-text-fill: #dcddde;
+    -fx-accent: #5865f2;
+    -fx-focus-color: #5865f2;
+    -fx-faint-focus-color: transparent;
+    -fx-font-family: "Whitney", "Helvetica Neue", "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+}
+
+.label {
+    -fx-text-fill: #dcddde;
+}
+
+.button {
+    -fx-background-color: #5865f2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #4752c4;
+}
+
+.list-view {
+    -fx-background-color: #2f3136;
+    -fx-border-color: transparent;
+    -fx-padding: 5px;
+}
+
+.list-cell {
+    -fx-text-fill: #8e9297;
+    -fx-padding: 6px 10px;
+    -fx-background-radius: 4px;
+    -fx-background-color: transparent;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #393d42;
+    -fx-text-fill: #dcddde;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #4f545c;
+    -fx-text-fill: #ffffff;
+}
+
+.text-field {
+    -fx-background-color: #40444b;
+    -fx-text-fill: #dcddde;
+    -fx-prompt-text-fill: #72767d;
+    -fx-background-radius: 5px;
+    -fx-border-width: 0;
+}
+
+.text {
+    -fx-fill: #dcddde;
+}
+
+.menu-bar {
+    -fx-background-color: #202225;
+}
+
+.menu .label {
+    -fx-text-fill: #b9bbbe;
+}

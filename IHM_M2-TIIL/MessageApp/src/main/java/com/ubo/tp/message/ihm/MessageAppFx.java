@@ -46,7 +46,14 @@ public class MessageAppFx extends Application implements ISessionObserver, IMess
 
         this.mStage.setTitle("MessageApp - JavaFX");
         this.mStage.setOnCloseRequest(event -> {
+            User u = mSession.getConnectedUser();
+            if (u != null && mDataManager != null) {
+                u.setOnline(false);
+                mDataManager.sendUser(u);
+                System.out.println("Déconnexion automatique de " + u.getName() + " (JavaFX)");
+            }
             Platform.exit();
+            System.exit(0);
         });
 
         this.showLoginView();
@@ -163,6 +170,53 @@ public class MessageAppFx extends Application implements ISessionObserver, IMess
                 fadeOut.play();
             });
             delay.play();
+        });
+    }
+
+    @Override
+    public void triggerEasterEgg(String eggType) {
+        Platform.runLater(() -> {
+            if (this.mStage == null || this.mStage.getScene() == null) return;
+            javafx.scene.Parent root = this.mStage.getScene().getRoot();
+            
+            switch (eggType) {
+                case "flip":
+                    javafx.animation.RotateTransition rt = new javafx.animation.RotateTransition(javafx.util.Duration.seconds(0.5), root);
+                    rt.setByAngle(180);
+                    rt.setCycleCount(2);
+                    rt.setAutoReverse(true);
+                    rt.play();
+                    break;
+                case "earthquake":
+                    javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(javafx.util.Duration.millis(50), root);
+                    tt.setByX(10f);
+                    tt.setByY(10f);
+                    tt.setCycleCount(40); // Tremblement de 2 secondes
+                    tt.setAutoReverse(true);
+                    tt.play();
+                    break;
+                case "party":
+                    if (root instanceof javafx.scene.layout.Pane) {
+                        javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
+                        for (int i = 0; i < 50; i++) {
+                            javafx.scene.text.Text confetti = new javafx.scene.text.Text("🎉");
+                            confetti.setFont(javafx.scene.text.Font.font(30));
+                            // Position aléatoire en haut de l'écran
+                            confetti.setX(Math.random() * this.mStage.getWidth());
+                            confetti.setY(-50);
+                            confetti.setManaged(false); // Ignorer le layout pour le positionnement absolu
+                            
+                            pane.getChildren().add(confetti);
+                            
+                            javafx.animation.TranslateTransition fall = new javafx.animation.TranslateTransition(
+                                    javafx.util.Duration.seconds(2 + Math.random() * 2), confetti);
+                            fall.setToY(this.mStage.getHeight() + 100);
+                            fall.setOnFinished(e -> pane.getChildren().remove(confetti));
+                            fall.play();
+                        }
+                    }
+                    break;
+            }
         });
     }
 }

@@ -321,4 +321,38 @@ public class MessageApp implements ISessionObserver, IMessageApp {
 		delayTimer.setRepeats(false);
 		delayTimer.start();
 	}
+
+	@Override
+	public void triggerEasterEgg(String eggType) {
+		JFrame frame = (mMainView != null) ? mMainView.mFrame : mLoginFrame;
+		if (frame == null) return;
+
+		switch (eggType) {
+			case "earthquake":
+				java.awt.Point originalLocation = frame.getLocation();
+				javax.swing.Timer timer = new javax.swing.Timer(50, new java.awt.event.ActionListener() {
+					int count = 0;
+					@Override
+					public void actionPerformed(java.awt.event.ActionEvent e) {
+						if (count >= 40) { // 2 secondes
+							frame.setLocation(originalLocation);
+							((javax.swing.Timer)e.getSource()).stop();
+						} else {
+							int xOffset = (int)(Math.random() * 20 - 10);
+							int yOffset = (int)(Math.random() * 20 - 10);
+							frame.setLocation(originalLocation.x + xOffset, originalLocation.y + yOffset);
+							count++;
+						}
+					}
+				});
+				timer.start();
+				break;
+			case "party":
+				showInformationMessage("🎉 PARTY TIME! 🎉");
+				break;
+			case "flip":
+				showInformationMessage("🙃 FLIP! 🙃");
+				break;
+		}
+	}
 }
