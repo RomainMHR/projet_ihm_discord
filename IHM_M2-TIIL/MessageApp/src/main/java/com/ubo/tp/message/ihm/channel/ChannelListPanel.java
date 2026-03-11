@@ -263,6 +263,11 @@ public class ChannelListPanel extends JPanel implements IChannelListView {
         mChannelList.addListSelectionListener(listener);
     }
 
+    @Override
+    public void clearSelection() {
+        mChannelList.clearSelection();
+    }
+
     public Channel getSelectedChannel() {
         return mChannelList.getSelectedValue();
     }

@@ -132,21 +132,17 @@ public class WatchableDirectory implements IWatchableDirectory {
 	 * Démarrage de la surveillance du répertoire
 	 */
 	protected void startPolling() {
-		mWatchingThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
+		mWatchingThread = new Thread(() -> {
+			try {
+				while (!Thread.currentThread().isInterrupted()) {
 					// Attente avant la prochaine vérification
 					Thread.sleep(POLLING_TIME);
 
 					// Vérification des changements
 					watchDirectory();
-
-					// Relancement automatique
-					startPolling();
-				} catch (InterruptedException e) {
-					System.err.println("Surveillance du répertoire interrompue.");
 				}
+			} catch (InterruptedException e) {
+				System.err.println("Surveillance du répertoire interrompue.");
 			}
 		});
 
@@ -158,7 +154,7 @@ public class WatchableDirectory implements IWatchableDirectory {
 	 * observeurs).
 	 */
 	protected void watchDirectory() {
-		if (mDirectory != null) {
+		if (mDirectory != null && mDirectory.listFiles() != null) {
 			Set<File> presentFiles = new HashSet<>();
 			Set<File> newFiles = new HashSet<>();
 			Set<File> deletedFiles = new HashSet<>();

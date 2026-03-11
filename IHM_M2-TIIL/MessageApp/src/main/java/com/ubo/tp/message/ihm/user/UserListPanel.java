@@ -87,6 +87,11 @@ public class UserListPanel extends JPanel implements IUserListView {
         mUserList.addListSelectionListener(listener);
     }
 
+    @Override
+    public void clearSelection() {
+        mUserList.clearSelection();
+    }
+
     public User getSelectedUser() {
         return mUserList.getSelectedValue();
     }

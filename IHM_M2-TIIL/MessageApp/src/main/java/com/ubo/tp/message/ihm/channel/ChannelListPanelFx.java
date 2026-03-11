@@ -291,4 +291,13 @@ public class ChannelListPanelFx extends BorderPane implements IChannelListView {
     public void setOnChannelSelected(Consumer<Channel> listener) {
         this.onChannelSelected = listener;
     }
+
+    @Override
+    public void clearSelection() {
+        Platform.runLater(() -> {
+            mIsUpdating = true;
+            mChannelList.getSelectionModel().clearSelection();
+            mIsUpdating = false;
+        });
+    }
 }

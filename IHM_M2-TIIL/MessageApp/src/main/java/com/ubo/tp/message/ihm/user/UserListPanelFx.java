@@ -54,6 +54,7 @@ public class UserListPanelFx extends BorderPane implements IUserListView {
         });
 
         mUserList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (mIsUpdating) return;
             if (onUserSelected != null && newVal != null) {
                 onUserSelected.accept(newVal);
             }
@@ -71,6 +72,17 @@ public class UserListPanelFx extends BorderPane implements IUserListView {
         Platform.runLater(() -> {
             mUserList.getItems().clear();
             mUserList.getItems().addAll(users);
+        });
+    }
+
+    private boolean mIsUpdating = false;
+
+    @Override
+    public void clearSelection() {
+        Platform.runLater(() -> {
+            mIsUpdating = true;
+            mUserList.getSelectionModel().clearSelection();
+            mIsUpdating = false;
         });
     }
 
